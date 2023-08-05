@@ -14,7 +14,7 @@ class ProductsService {
         category
       );
     } catch (error) {
-      throw new Error("Failed to create product");
+      throw console.error("Failed to create product: " + error);
     }
   }
 

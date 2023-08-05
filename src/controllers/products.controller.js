@@ -1,17 +1,16 @@
 import { ProductsMongoose } from "../DAO/models/mongoose/products.mongoose.js";
 import { productsService } from "../services/products.service.js";
+import ProductDTO from "./DTO/products.dto.js";
 
 class ProductsController {
   async getAll(req, res) {
     try {
       const allProducts = await productsService.getAll();
-      return res
-        .status(200)
-        .json({
-          status: "success",
-          message: "Products found",
-          payload: allProducts,
-        });
+      return res.status(200).json({
+        status: "success",
+        message: "Products found",
+        payload: allProducts,
+      });
     } catch (error) {
       return res.status(500).json({ error: "Internal server error" });
     }
@@ -26,7 +25,7 @@ class ProductsController {
       }
       const { title, description, price, code, stock, category } = req.body;
       const thumbnail = req.file.filename;
-      const newProduct = productsService.create(
+      const productDTO = new ProductDTO(
         title,
         description,
         price,
@@ -34,6 +33,15 @@ class ProductsController {
         code,
         stock,
         category
+      );
+      const newProduct = productsService.create(
+        productDTO.title,
+        productDTO.description,
+        productDTO.price,
+        productDTO.thumbnail,
+        productDTO.code,
+        productDTO.stock,
+        productDTO.category
       );
       return res.status(201).json({
         status: "success",
@@ -57,7 +65,7 @@ class ProductsController {
       if (query === "available") {
         filter.stock = { $gt: 0 };
       }
-      
+
       const queryResult = await ProductsMongoose.paginate(filter, {
         sort: sortOption,
         limit: prodLimit || 10,
@@ -242,27 +250,25 @@ class ProductsController {
         : null;
 
       const mainTitle = "ALL PRODUCTS";
-      return res
-        .status(200)
-        .render("products", {
-          user,
-          query,
-          sort,
-          prodLimit,
-          mainTitle,
-          paginatedProd,
-          totalDocs,
-          limit,
-          totalPages,
-          page,
-          pagingCounter,
-          hasPrevPage,
-          hasNextPage,
-          prevPage,
-          nextPage,
-          prevLink,
-          nextLink,
-        });
+      return res.status(200).render("products", {
+        user,
+        query,
+        sort,
+        prodLimit,
+        mainTitle,
+        paginatedProd,
+        totalDocs,
+        limit,
+        totalPages,
+        page,
+        pagingCounter,
+        hasPrevPage,
+        hasNextPage,
+        prevPage,
+        nextPage,
+        prevLink,
+        nextLink,
+      });
     } catch (error) {
       console.error("Failed to fetch products:", error);
       return res
@@ -271,15 +277,19 @@ class ProductsController {
     }
   }
 
-  async renderRealTimeProd (req, res) {
+  async renderRealTimeProd(req, res) {
     try {
       const products = await productsService.getAll();
-      const plainProducts = products.map(product => product.toObject());
+      const plainProducts = products.map((product) => product.toObject());
       const mainTitle = "REAL TIME PRODUCTS";
-      return res.status(200).render("real-time-products", { mainTitle, products: plainProducts });
+      return res
+        .status(200)
+        .render("real-time-products", { mainTitle, products: plainProducts });
     } catch (error) {
       console.error("Failed to fetch products:", error);
-      return res.status(500).render("errorPage", { msg: "Error 500. Failed to fetch products."});
+      return res
+        .status(500)
+        .render("errorPage", { msg: "Error 500. Failed to fetch products." });
     }
   }
 }

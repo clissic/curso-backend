@@ -1,8 +1,8 @@
 import { Server } from "socket.io";
+import { MsgMongoose } from "../DAO/models/mongoose/msgs.mongoose.js";
 import { cartsController } from "../controllers/carts.controller.js";
 import { productsController } from "../controllers/products.controller.js";
 import { productsService } from "../services/products.service.js";
-import { MsgMongoose } from "../DAO/models/mongoose/msgs.mongoose.js";
 
 export function connectSocketServer(httpServer) {
   const socketServer = new Server(httpServer);
@@ -30,8 +30,8 @@ export function connectSocketServer(httpServer) {
   socketServer.on("connection", (socket) => {
     socket.on("productIdToBeRemoved", async (id) => {
       try {
-        const productDeleted = await productsController.findByIdAndDelete(id);
-        const deletedAndUpdatedProducts = await productsController.findAll();
+        const productDeleted = await productsService.getByIdAndDelete(id);
+        const deletedAndUpdatedProducts = await productsService.getAll();
         socketServer.emit(
           "productDeleted",
           deletedAndUpdatedProducts,
@@ -45,8 +45,9 @@ export function connectSocketServer(httpServer) {
     // AGREGAR PRODUCTO
     socket.on("addProduct", async (newProduct) => {
       try {
-        const createdProduct = await productsService.create(newProduct);
-        const createdAndUpdatedProducts = await productsController.findAll();
+        console.log(newProduct)
+        const createdProduct = await productsService.create(newProduct.title, newProduct.description, newProduct.price, newProduct.thumbnail, newProduct.code, newProduct.stock, newProduct.category);
+        const createdAndUpdatedProducts = await productsService.getAll();
         socket.emit("productAdded", createdAndUpdatedProducts, createdProduct);
       } catch (error) {
         console.error(error);
@@ -59,10 +60,10 @@ export function connectSocketServer(httpServer) {
   socketServer.on("connection", (socket) => {
     socket.on("productIdToBeAdded", async (id) => {
       try {
-        const findCart = await cartsController.findById("649b9ae2f6e9f77b88bbcd5c");
+        const findCart = await cartsController.getById("649b9ae2f6e9f77b88bbcd5c");
         const cid = findCart._id;
         const pid = id;
-        const productToAdd = await productsController.findById(pid);
+        const productToAdd = await productsService.getById(pid);
         if (!productToAdd) {
           return res
             .status(404)
@@ -72,7 +73,7 @@ export function connectSocketServer(httpServer) {
               payload: {},
             });
         }
-        const cart = await cartsController.findById(cid);
+        const cart = await cartsController.getById(cid);
         if (!cart) {
           return res
             .status(404)
@@ -86,7 +87,7 @@ export function connectSocketServer(httpServer) {
           (product) => product.product.toString() === pid
         );
         if (existingProduct) {
-          await cartsController.findOneAndUpdate(cid, pid);
+          await cartsController.getOneAndUpdate(cid, pid);
         } else {
           cart.products.push({ product: pid, quantity: 1 });
           await cart.save();
