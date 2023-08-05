@@ -1,0 +1,57 @@
+<h2 class="firstTitle">{{mainTitle}}</h2>
+<div class="realTimeProds" id="realTimeProds">
+  {{#each products}}
+    {{#with this}}
+      <div class="realTimeProd">
+        <div class="realTimeProdParams">
+          <p class="realTimeProdId">Id: {{_id}}</p>
+          <p class="realTimeProdThumbnail">Thumbnail: <a target="_blank" href="{{thumbnail}}">Product img</a></p>
+          <p class="realTimeProdTitle">Name: {{title}}</p>
+          <p class="realTimeProdPrice">Price: {{price}}</p>
+          <p class="realTimeProdDesc">Description: {{description}}</p>
+          <p class="realTimeProdCode">Code: {{code}}</p>
+          <p class="realTimeProdCategory">Category: {{category}}</p>
+          <p class="realTimeProdStock">Stock: {{stock}}</p>
+          <p class="realTimeProdStatus">Status: {{status}}</p>
+        </div>
+        <button id="realTimeDeleteButton" data-id="{{_id}}" class="deleteButton">Delete</button>
+      </div>
+    {{/with}}
+  {{/each}}
+</div>
+
+<h2 class="secondTitle">ADD PRODUCT:</h2>
+<form>
+  <div class="form-group">
+    <label for="thumbnail">Image URL:</label>
+    <input type="text" id="thumbnail" name="thumbnail" required />
+  </div>
+  <div class="form-group">
+    <label for="title">Name:</label>
+    <input type="text" id="title" name="title" required />
+  </div>
+  <div class="form-group">
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" required />
+  </div>
+  <div class="form-group">
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea>
+  </div>
+  <div class="form-group">
+    <label for="code">Code:</label>
+    <input type="text" id="code" name="code" required />
+  </div>
+  <div class="form-group">
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category" required />
+  </div>
+    <div class="form-group">
+    <label for="stock">Stock:</label>
+    <input type="number" id="stock" name="stock" required />
+  </div>
+  <input type="submit" value="Submit" id="addProductSubmitBtn"/>
+</form>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/real-time-products.js"></script>
