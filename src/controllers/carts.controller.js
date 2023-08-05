@@ -1,5 +1,6 @@
 import { cartsService } from "../services/carts.service.js";
 import { productsService } from "../services/products.service.js";
+import CartDTO from "./DTO/carts.dto.js";
 
 class CartsController {
   async deleteAllProdInCart(req, res) {
@@ -77,6 +78,9 @@ class CartsController {
     try {
       const cid = req.params.cid;
       const productsToUpdate = req.body.products;
+
+      const cartDTO = new CartDTO(productsToUpdate);
+
       const cart = await cartsService.getById(cid);
       if (!cart) {
         return res.status(404).json({
@@ -85,22 +89,7 @@ class CartsController {
           payload: {},
         });
       }
-      cart.products = productsToUpdate.map((product) => {
-        const existingProduct = cart.products.find(
-          (p) => p.product.toString() === product.product
-        );
-        if (existingProduct) {
-          return {
-            product: product.product,
-            quantity: product.quantity || existingProduct.quantity,
-          };
-        } else {
-          return {
-            product: product.product,
-            quantity: product.quantity,
-          };
-        }
-      });
+      cart.products = cartDTO.products;
       await cart.save();
       return res.status(200).json({
         status: "success",
@@ -108,6 +97,7 @@ class CartsController {
         payload: cart,
       });
     } catch (error) {
+      console.log(error)
       return res.status(500).json({
         status: "error",
         message: "Failed to update products in cart",
