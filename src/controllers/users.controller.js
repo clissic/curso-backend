@@ -1,4 +1,6 @@
 import { userService } from "../services/users.service.js";
+import { createHash } from "../utils/Bcrypt.js";
+import UserDTO from "./DTO/users.dto.js";
 
 class UserController {
   async getAll(req, res) {
@@ -41,9 +43,10 @@ class UserController {
 
   async create(req, res) {
     try {
-      const { first_name, last_name, email } = req.body;
+      const { first_name, last_name, email, age, password } = req.body;
       console.log(req.body)
-      if (!first_name || !last_name || !email) {
+      const userDTO = new UserDTO(first_name, last_name, email, age, createHash(password));
+      if (!userDTO.first_name || !userDTO.last_name || !userDTO.email) {
         console.log(
           "Validation error: please complete firstName, lastName and email."
         );
@@ -53,13 +56,7 @@ class UserController {
           payload: {},
         });
       }
-      const userCreated = await userService.create({
-        first_name,
-        last_name,
-        email,
-        age,
-        password,
-      });
+      const userCreated = await userService.create(userDTO);
       return res.status(201).json({
         status: "success",
         msg: "User created",
