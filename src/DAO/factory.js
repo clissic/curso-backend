@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { connect } from "mongoose";
 
 export let productsModel;
+export let usersModel;
 
 switch (config.persistence) {
   case "MONGO":
@@ -27,13 +28,18 @@ switch (config.persistence) {
     );
     productsModel = ProductsMongo;
 
+    const { default: UsersMongo } = await import(
+      "../DAO/models/products.model.js"
+    );
+    usersModel = UsersMongo;
+
     break;
   case "MEMORY":
     console.log("Persistence with Memory");
     const { default: ProductsMemory } = await import(
       "../DAO/memory/products.memory.js"
     );
-    factoryProductsModel = ProductsMemory;
+    productsModel = ProductsMemory;
 
     break;
   default:

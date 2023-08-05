@@ -1,6 +1,6 @@
 import { ProductsMongoose } from "./mongoose/products.mongoose.js";
 
-class ProductsModel {
+export default class ProductsModel {
   async create(title, description, price, thumbnail, code, stock, category) {
     const newProduct = new ProductsMongoose({
       title,

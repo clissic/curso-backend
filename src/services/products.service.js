@@ -1,4 +1,5 @@
-import { productsModel } from "../DAO/factory.js";
+import { productsModel } from "../DAO/models/products.model.js";
+/* import { productsModel } from "../DAO/memory/products.memory.js"; */
 
 class ProductsService {
   async create(title, description, price, thumbnail, code, stock, category) {

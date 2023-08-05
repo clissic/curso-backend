@@ -185,6 +185,7 @@ class CartsController {
   
       return res.status(201).redirect("/cart/" + cid);
     } catch (error) {
+      console.log(error)
       return res.status(500).render("errorPage", {
         msg: "Error 500. Failed to add product to cart.",
       });

@@ -2,7 +2,7 @@ import { cartsService } from "../../services/carts.service.js";
 import { isValidPassword } from "../../utils/Bcrypt.js";
 import { UserMongoose } from "../models/mongoose/users.mongoose.js";
 
-class UserModel {
+export default class UserModel {
   async getAll() {
     const users = await UserMongoose.find(
       {},

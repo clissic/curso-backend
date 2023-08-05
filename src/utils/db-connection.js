@@ -1,4 +1,4 @@
-/* import dotenv from "dotenv";
+import dotenv from "dotenv";
 import { connect } from "mongoose";
 
 dotenv.config();
@@ -13,4 +13,4 @@ export async function connectMongo() {
     console.log(e);
     throw "Can not connect to the db";
   }
-} */
+}

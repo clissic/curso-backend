@@ -19,6 +19,7 @@ import { sessionsRouter } from "./routes/session.routes.js";
 import { signupRouter } from "./routes/signup.html.routes.js";
 import { usersRouter } from "./routes/users.routes.js";
 import { connectSocketServer } from "./utils/sockets-server.js";
+import { connectMongo } from "./utils/db-connection.js";
 
 const app = express();
 const PORT = 8080;
@@ -30,6 +31,7 @@ const httpServer = app.listen(PORT, () => {
   );
 });
 
+connectMongo();
 connectSocketServer(httpServer);
 
 app.use(session({
