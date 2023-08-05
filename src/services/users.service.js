@@ -1,4 +1,5 @@
 import { userModel } from "../DAO/models/users.model.js";
+/* import { userModel } from "../DAO/models/users.memory.js"; */
 
 class UserService {
   async getAll() {

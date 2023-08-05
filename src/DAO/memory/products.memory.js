@@ -61,7 +61,7 @@ class ProductManager {
     this.products.push(addedProduct);
     const productsString = JSON.stringify(this.products);
     fs.writeFileSync("src/DAO/memory/products.json", productsString);
-    return productsString
+    return addedProduct
   }
 
   getById(id) {
