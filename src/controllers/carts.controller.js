@@ -97,7 +97,7 @@ class CartsController {
         payload: cart,
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return res.status(500).json({
         status: "error",
         message: "Failed to update products in cart",
@@ -147,41 +147,38 @@ class CartsController {
   async getOneAndUpdate(req, res) {
     try {
       const { cid, pid } = req.params;
-  
       const productToAdd = await productsService.getById(pid);
       if (!productToAdd) {
         return res
           .status(404)
           .render("errorPage", { msg: "Sorry, product not found." });
       }
-  
+
       const cart = await cartsService.getById(cid);
       if (!cart) {
         return res
           .status(404)
           .render("errorPage", { msg: "Sorry, cart does not exist." });
       }
-  
       const existingProduct = cart.products.find(
-        (product) => product.product.toString() === pid
+        (product) => product.product._id.toString() == pid
       );
-  
+
       if (existingProduct) {
         await cartsService.getOneAndUpdate(cid, pid);
       } else {
         cart.products.push({ product: pid, quantity: 1 });
         await cart.save();
       }
-  
+
       return res.status(201).redirect("/cart/" + cid);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return res.status(500).render("errorPage", {
         msg: "Error 500. Failed to add product to cart.",
       });
     }
   }
-  
 
   async getById(req, res) {
     try {
@@ -232,7 +229,7 @@ class CartsController {
           email: req.user ? req.user.email : req.session.email,
           first_name: req.user ? req.user.first_name : req.session.first_name,
           last_name: req.user ? req.user.last_name : req.session.last_name,
-          avatar: req.user? req.user.avatar : req.session.avatar,
+          avatar: req.user ? req.user.avatar : req.session.avatar,
           age: req.user ? req.user.age : req.session.age,
           role: req.user ? req.user.role : req.session.role,
           cartId: req.user ? req.user.cartId : req.session.cartId,
