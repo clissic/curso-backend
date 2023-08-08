@@ -423,6 +423,17 @@ input[type="submit"]:hover {
   background-color: rgb(170, 0, 0);
 }
 
+#purchaseDetails {
+  width: 70vw;
+  margin: 10vh auto 10vh auto;
+  text-align: center;
+}
+
+.noStockUl {
+  list-style: none;
+  font-weight: 600;
+}
+
 /* ERROR PAGE RENDER */
 
 .notFoundBckgrnd {
