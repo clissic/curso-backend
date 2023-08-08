@@ -1,4 +1,4 @@
-class UserDTO {
+class SessionDTO {
   constructor(session) {
     this.email = session.email || null;
     this.first_name = session.first_name || null;
@@ -8,4 +8,4 @@ class UserDTO {
   }
 }
 
-export default UserDTO;
+export default SessionDTO;

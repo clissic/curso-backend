@@ -1,5 +1,7 @@
 import { cartsService } from "../services/carts.service.js";
 import { productsService } from "../services/products.service.js";
+import { ticketsService } from "../services/tickets.service.js";
+import { generateRandomCode } from "../utils/random-code.js";
 import CartDTO from "./DTO/carts.dto.js";
 
 class CartsController {
@@ -235,6 +237,7 @@ class CartsController {
           cartId: req.user ? req.user.cartId : req.session.cartId,
         };
       }
+      console.log(user);
       const cid = req.params.cid;
       const mainTitle = "CART";
       const cart = await cartsService.getById(cid);
@@ -248,6 +251,64 @@ class CartsController {
       return res
         .status(500)
         .render("errorPage", { msg: "Error 500. Cart could not be rendered." });
+    }
+  }
+
+  async purchase(req, res) {
+    try {
+      const cid = req.params.cid;
+  
+      const cart = await cartsService.getById(cid);
+      if (!cart) {
+        return res.status(404).json({
+          status: "error",
+          message: "Cart does not exist",
+          payload: {},
+        });
+      }
+  
+      const productsWithInsufficientStock = [];
+  
+      let totalPrice = 0;
+      for (const product of cart.products) {
+        const { product: pid, quantity } = product;
+        const dbProduct = await productsService.getById(pid);
+        if (dbProduct && dbProduct.stock >= quantity) {
+          totalPrice += dbProduct.price * quantity;
+          await productsService.decreaseStock(pid, quantity);
+        } else {
+          productsWithInsufficientStock.push(product);
+        }
+      }
+  
+      cart.products = productsWithInsufficientStock;
+      await cart.save();
+  
+      if (totalPrice > 0) {
+        const purchase_datetime = Date.now();
+        const code = generateRandomCode();
+        const purchaser = "joaquin.perez.coria@gmail.com"
+        const ticket = await ticketsService.create(code, purchase_datetime, totalPrice, purchaser);
+  
+        return res.status(200).json({
+          status: "success",
+          message: "Purchase successfully processed",
+          payload: ticket,
+          noStock: cart.products,
+        });
+      } else {
+        return res.status(400).json({
+          status: "error",
+          message: "All selected products have insufficient stock",
+          payload: {},
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to process purchase",
+        payload: {},
+      });
     }
   }
 }

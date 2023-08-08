@@ -12,7 +12,8 @@
       <a class="userCartBtn" href="/api/sessions/logout"><strong>LOGOUT</strong></a>
     </div>
   {{/if}}
-  <h1 class="firstTitle">{{mainTitle}}</h1>
+  <h1 class="firstTitle" id="cartTitle" data-id="{{cart._id}}">{{mainTitle}}</h1>
+  {{#if cart.products}}
   {{#each cart.products}}
     {{#with this}}
       <div class="realTimeCartProds" id="realTimeCartProds">
@@ -39,9 +40,15 @@
           <p>Unit price:</p>
           <h2>U$S {{product.price}}</h2>
         </div>
+        <button class="deleteButtonCart" data-id={{product._id}}><img class="deleteImg" src="https://cdn-icons-png.flaticon.com/512/1017/1017530.png" alt="delete"></button>
       </div>
     {{/with}}
   {{/each}}
+  <div class="finalButtonsConteiner">
+    <button class="cartButton" id="confirmCart">FINISH PURCHASE</button>
+    <button class="cartButton" id="emptyCart">EMPTY CART</button>
+  </div>
+  {{/if}}
 </div>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/products.js"></script>
+<script src="/js/cart.js"></script>

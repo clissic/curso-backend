@@ -50,6 +50,26 @@ class ProductsService {
     }
   }
 
+  async decreaseStock(pid, quantity) {
+    try {
+      const product = await productsModel.getById(pid);
+      if (!product) {
+        throw new Error("Product not found");
+      }
+
+      if (product.stock < quantity) {
+        throw new Error("Insufficient stock");
+      }
+
+      product.stock -= quantity;
+      await product.save();
+
+      return product;
+    } catch (error) {
+      throw new Error(`Failed to decrease stock: ${error.message}`);
+    }
+  }
+
 /*   async paginate(filter, options) {
     try {
       const queryResult = await productsModel.paginate(filter, options);

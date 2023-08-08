@@ -25,6 +25,23 @@ class CartsService {
       throw new Error("Failed to update cart by ID and product ID");
     }
   }
+
+  async removeProduct(cid, pid) {
+    try {
+      return await cartsModel.removeProduct(cid, pid);
+    } catch (error) {
+      throw new Error("Failed to remove product from cart");
+    }
+  }
+
+  async getAllProducts(cid) {
+    try {
+      const cartProducts = await cartsModel.getAllProducts(cid);
+      return cartProducts;
+    } catch (error) {
+      throw new Error("Failed to get all products from cart");
+    }
+  }
 }
 
 export const cartsService = new CartsService();

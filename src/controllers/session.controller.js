@@ -1,4 +1,4 @@
-import UserDTO from "./DTO/sessions.dto.js";
+import SessionDTO from "./DTO/sessions.dto.js";
 
 class SessionsController {
   async signup(req, res) {
@@ -61,8 +61,10 @@ class SessionsController {
 
   current(req, res) {
     const session = req.session.user || req.session;
-    const userDTO = new UserDTO(session)
+    console.log(session)
+    const userDTO = new SessionDTO(session)
     res.send(userDTO);
+    return userDTO
   }
 }
 

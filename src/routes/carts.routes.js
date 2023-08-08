@@ -16,4 +16,6 @@ cartsRouter.put("/:cid", checkUser, cartsController.modProdInCart);
 
 cartsRouter.put("/:cid/products/:pid", checkUser, cartsController.modQuantProdInCartById);
 
-cartsRouter.delete("/:cid", checkUser, cartsController.deleteAllProdInCart);
+cartsRouter.delete("/:cid", cartsController.deleteAllProdInCart);
+
+cartsRouter.get("/:cid/purchase", cartsController.purchase);
