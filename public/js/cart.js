@@ -57,48 +57,56 @@ socket.on(
 
 const confirmCart = document.getElementById("confirmCart");
 const emptyCart = document.getElementById("emptyCart");
+const userEmail = document.getElementById("userEmail").value;
+console.log(userEmail);
 
 confirmCart.addEventListener("click", () => {
-  fetch(`http://127.0.0.1:8080/api/carts/${cid}/purchase`, { method: "GET" })
+  fetch(`http://127.0.0.1:8080/api/carts/${cid}/purchase`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email: userEmail }),
+  })
     .then((response) => response.json())
     .then((data) => {
-        console.log(data)
-        if (data.noStock) {
-            Swal.fire({
-              icon: "success",
-              title: "Thank you for buying in iCommerce!",
-              text: `
+      console.log(data);
+      if (data.noStock) {
+        Swal.fire({
+          icon: "success",
+          title: "Thank you for buying in iCommerce!",
+          text: `
                   Hello ${data.payload.purchaser}! Your purchase with code: ${
-                data.payload.code
-              }, for a total of: U$D ${data.payload.amount}, was successfully made.
+            data.payload.code
+          }, for a total of: U$D ${data.payload.amount}, was successfully made.
                   The following products have no stock and will stay in your cart:
                     ${data.noStock
                       .map((product) => `${product.product.title}`)
                       .join(", ")}
                 `,
-              showConfirmButton: false,
-              allowOutsideClick: false,
-              allowEscapeKey: false,
-            });
-            setTimeout(() => {
-              location.reload();
-            }, "10000");
-        } else if (data.message) {
-            Swal.fire({
-                icon: "error",
-                title: "We are sorry...",
-                text: `
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        });
+        setTimeout(() => {
+          location.reload();
+        }, "10000");
+      } else if (data.message) {
+        Swal.fire({
+          icon: "error",
+          title: "We are sorry...",
+          text: `
                     Your purchase could not be realized.
                     ${data.message}.
                     `,
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-              });
-              setTimeout(() => {
-                location.reload();
-              }, "10000");
-        }
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        });
+        setTimeout(() => {
+          location.reload();
+        }, "10000");
+      }
     })
     .catch((error) => {
       console.error("Error:", error);

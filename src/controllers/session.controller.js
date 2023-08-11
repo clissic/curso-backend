@@ -29,6 +29,7 @@ class SessionsController {
         first_name: req.user.first_name,
         last_name: req.user.last_name,
         role: req.user.role,
+        avatar: req.user.avatar,
         cartId: req.user.cartId,
       };
       return res.redirect("/products");
@@ -55,6 +56,7 @@ class SessionsController {
     req.session.last_name = req.user.last_name;
     req.session.age = req.user.age;
     req.session.role = req.user.role;
+    req.session.avatar = req.user.avatar;
     req.session.cartId = req.user.cartId;
     res.redirect("/products");
   }

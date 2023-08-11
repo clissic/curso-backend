@@ -237,7 +237,7 @@ class CartsController {
           cartId: req.user ? req.user.cartId : req.session.cartId,
         };
       }
-      console.log(user);
+      console.log(user)
       const cid = req.params.cid;
       const mainTitle = "CART";
       const cart = await cartsService.getById(cid);
@@ -257,6 +257,7 @@ class CartsController {
   async purchase(req, res) {
     try {
       const cid = req.params.cid;
+      const userEmail = req.body.email;
   
       const cart = await cartsService.getById(cid);
       if (!cart) {
@@ -287,7 +288,7 @@ class CartsController {
       if (totalPrice > 0) {
         const purchase_datetime = Date.now();
         const code = generateRandomCode();
-        const purchaser = "joaquin.perez.coria@gmail.com"
+        const purchaser = userEmail;
         const ticket = await ticketsService.create(code, purchase_datetime, totalPrice, purchaser);
   
         return res.status(200).json({
