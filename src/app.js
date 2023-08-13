@@ -5,7 +5,6 @@ import handlebars from "express-handlebars";
 import session from "express-session";
 import passport from "passport";
 import path from "path";
-import pkg from 'session-file-store';
 import { __dirname } from "./config.js";
 import { iniPassport } from "./config/passport.config.js";
 import { cartRouter } from "./routes/cart.html.routes.js";
@@ -18,12 +17,11 @@ import { realTimeProducts } from "./routes/real-time-products.routes.js";
 import { sessionsRouter } from "./routes/session.routes.js";
 import { signupRouter } from "./routes/signup.html.routes.js";
 import { usersRouter } from "./routes/users.routes.js";
+import MongoSingleton from "./utils/singleton-db-connection.js";
 import { connectSocketServer } from "./utils/sockets-server.js";
-import { connectMongo } from "./utils/db-connection.js";
 
 const app = express();
 const PORT = 8080;
-const fileStore = pkg(session);
 
 const httpServer = app.listen(PORT, () => {
   console.log(
@@ -31,7 +29,7 @@ const httpServer = app.listen(PORT, () => {
   );
 });
 
-connectMongo();
+MongoSingleton.getInstance();
 connectSocketServer(httpServer);
 
 app.use(session({
