@@ -19,6 +19,7 @@ import { signupRouter } from "./routes/signup.html.routes.js";
 import { usersRouter } from "./routes/users.routes.js";
 import MongoSingleton from "./utils/singleton-db-connection.js";
 import { connectSocketServer } from "./utils/sockets-server.js";
+import { mockingTest } from "./routes/mocking.test.routes.js";
 
 const app = express();
 const PORT = 8080;
@@ -78,6 +79,9 @@ app.get("/error-auth", (req, res) => {
     .status(400)
     .render("errorPage", {msg: "Authorization error."})
 });
+
+// TESTING
+app.use("/mockingproducts", mockingTest)
 
 app.get("*", (req, res) => {
   return res
