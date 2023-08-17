@@ -18,9 +18,6 @@ class CartsController {
           message: "Error trying to find a cart",
           code: EErros.CART_NOT_FOUND,
         });
-        return res.render("errorPage", {
-          msg: "Error 404. No cart found.",
-        });
       }
       cart.products = [];
       await cart.save();
@@ -35,9 +32,6 @@ class CartsController {
         cause: "Could not delete the product",
         message: "Error trying to delete a product for cart",
         code: EErros.CART_PRODUCT_DELETE,
-      });
-      return res.render("errorPage", {
-        msg: "Error 500. Could not delete the product.",
       });
     }
   }
@@ -56,9 +50,6 @@ class CartsController {
           message: "Error trying to find a cart",
           code: EErros.CART_NOT_FOUND,
         });
-        return res.render("errorPage", {
-          msg: "Error 404. No cart found.",
-        });
       }
 
       const productIndex = cart.products.findIndex(
@@ -70,9 +61,6 @@ class CartsController {
           cause: "No product found",
           message: "Error trying to find a product",
           code: EErros.PRODUCT_NOT_FOUND,
-        });
-        return res.render("errorPage", {
-          msg: "Error 404. No product found.",
         });
       }
 
@@ -92,9 +80,6 @@ class CartsController {
         message: "Error trying to update the quantity of a product",
         code: EErros.UPDATE_PRODUCT_QUANTITY,
       });
-      return res.render("errorPage", {
-        msg: "Error 500. Error updating product.",
-      });
     }
   }
 
@@ -113,9 +98,6 @@ class CartsController {
           message: "Error trying to find a cart",
           code: EErros.CART_NOT_FOUND,
         });
-        return res.render("errorPage", {
-          msg: "Error 404. No cart found.",
-        });
       }
       cart.products = cartDTO.products;
       await cart.save();
@@ -130,9 +112,6 @@ class CartsController {
         cause: "Error updating product",
         message: "Error trying to update the quantity of a product",
         code: EErros.UPDATE_PRODUCT_QUANTITY,
-      });
-      return res.render("errorPage", {
-        msg: "Error 500. Error updating product.",
       });
     }
   }
@@ -149,9 +128,6 @@ class CartsController {
           message: "Error trying to find a cart",
           code: EErros.CART_NOT_FOUND,
         });
-        return res.render("errorPage", {
-          msg: "Error 404. No cart found.",
-        });
       }
       const productToDeleteIndex = cart.products.findIndex(
         (product) => product.product._id.toString() === pid
@@ -162,9 +138,6 @@ class CartsController {
           cause: "No product found",
           message: "Error trying to find a product",
           code: EErros.PRODUCT_NOT_FOUND,
-        });
-        return res.render("errorPage", {
-          msg: "Error 404. No product found.",
         });
       }
       cart.products.splice(productToDeleteIndex, 1);
@@ -181,7 +154,6 @@ class CartsController {
         message: "Error trying to delete a product for cart",
         code: EErros.CART_PRODUCT_DELETE,
       });
-      return res.render("errorPage", { msg: "Cart not found" });
     }
   }
 
@@ -196,7 +168,6 @@ class CartsController {
           message: "Error trying to find a product",
           code: EErros.PRODUCT_NOT_FOUND,
         });
-        return res.render("errorPage", { msg: "Sorry, product not found." });
       }
 
       const cart = await cartsService.getById(cid);
@@ -207,8 +178,6 @@ class CartsController {
           message: "Error trying to find a cart",
           code: EErros.CART_NOT_FOUND,
         });
-        return res
-          .render("errorPage", { msg: "Sorry, cart does not exist." });
       }
       const existingProduct = cart.products.find(
         (product) => product.product._id.toString() == pid
@@ -228,9 +197,6 @@ class CartsController {
         cause: "Could not add product",
         message: "Error trying to add a product to cart",
         code: EErros.CART_NOT_FOUND,
-      });
-      return res.render("errorPage", {
-        msg: "Error 500. Failed to add product to cart.",
       });
     }
   }
@@ -252,7 +218,6 @@ class CartsController {
           message: "Error trying to find a cart",
           code: EErros.CART_NOT_FOUND,
         });
-        return res.render("errorPage", { msg: "Cart not found" });
       }
     } catch {
       CustomError.createError({
@@ -261,7 +226,6 @@ class CartsController {
         message: "Error trying to get a cart",
         code: EErros.CART_GET_ERROR,
       });
-      return res.render("errorPage", { msg: "Failed to get cart" });
     }
   }
 
@@ -280,7 +244,6 @@ class CartsController {
         message: "Error trying to create a cart",
         code: EErros.CART_CREATE_ERROR,
       });
-      return res.render("errorPage", { msg: "Failed to create cart" });
     }
   }
 
@@ -315,7 +278,6 @@ class CartsController {
           message: "Error trying to render a cart",
           code: EErros.CART_RENDER_ERROR,
         });
-        return res.render("errorPage", { msg: "Failed to render cart" });
     }
   }
 
