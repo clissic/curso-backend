@@ -20,6 +20,8 @@ import { usersRouter } from "./routes/users.routes.js";
 import MongoSingleton from "./utils/singleton-db-connection.js";
 import { connectSocketServer } from "./utils/sockets-server.js";
 import { mockingTest } from "./routes/mocking.test.routes.js";
+import compression from "compression";
+import errorHandler from "./middlewares/error.js"
 
 const app = express();
 const PORT = 8080;
@@ -45,6 +47,7 @@ app.use(session({
 }));
 
 app.use(cors());
+app.use(compression());
 
 // MIDDLEWARES
 app.use(express.json());
@@ -88,3 +91,5 @@ app.get("*", (req, res) => {
     .status(404)
     .render("errorPage", {msg: "Error 404, page not found."})
 });
+
+app.use(errorHandler)

@@ -1,4 +1,6 @@
 import { cartsService } from "../services/carts.service.js";
+import CustomError from "../services/errors/custom-error.js";
+import EErros from "../services/errors/enums.js";
 import { productsService } from "../services/products.service.js";
 import { ticketsService } from "../services/tickets.service.js";
 import { generateRandomCode } from "../utils/random-code.js";
@@ -10,10 +12,14 @@ class CartsController {
       const cid = req.params.cid;
       const cart = await cartsService.getById(cid);
       if (!cart) {
-        return res.status(404).json({
-          status: "error",
-          message: "Cart does not exist",
-          payload: {},
+        CustomError.createError({
+          name: "Cart search error",
+          cause: "No cart found",
+          message: "Error trying to find a cart",
+          code: EErros.CART_NOT_FOUND,
+        });
+        return res.render("errorPage", {
+          msg: "Error 404. No cart found.",
         });
       }
       cart.products = [];
@@ -24,10 +30,14 @@ class CartsController {
         payload: cart,
       });
     } catch (error) {
-      return res.status(500).json({
-        status: "error",
-        message: "Failed to delete products from cart",
-        payload: {},
+      CustomError.createError({
+        name: "Cart product delete error",
+        cause: "Could not delete the product",
+        message: "Error trying to delete a product for cart",
+        code: EErros.CART_PRODUCT_DELETE,
+      });
+      return res.render("errorPage", {
+        msg: "Error 500. Could not delete the product.",
       });
     }
   }
@@ -40,10 +50,14 @@ class CartsController {
 
       const cart = await cartsService.getById(cid);
       if (!cart) {
-        return res.status(404).json({
-          status: "error",
-          message: "Cart does not exist",
-          payload: {},
+        CustomError.createError({
+          name: "Cart search error",
+          cause: "No cart found",
+          message: "Error trying to find a cart",
+          code: EErros.CART_NOT_FOUND,
+        });
+        return res.render("errorPage", {
+          msg: "Error 404. No cart found.",
         });
       }
 
@@ -51,10 +65,14 @@ class CartsController {
         (product) => product.product._id.toString() === pid
       );
       if (productIndex === -1) {
-        return res.status(404).json({
-          status: "error",
-          message: "Product does not exist in the cart",
-          payload: {},
+        CustomError.createError({
+          name: "Product search error",
+          cause: "No product found",
+          message: "Error trying to find a product",
+          code: EErros.PRODUCT_NOT_FOUND,
+        });
+        return res.render("errorPage", {
+          msg: "Error 404. No product found.",
         });
       }
 
@@ -68,10 +86,14 @@ class CartsController {
         payload: cart,
       });
     } catch (error) {
-      return res.status(500).json({
-        status: "error",
-        message: "Failed to update product quantity in cart",
-        payload: {},
+      CustomError.createError({
+        name: "Product update error",
+        cause: "Error updating product",
+        message: "Error trying to update the quantity of a product",
+        code: EErros.UPDATE_PRODUCT_QUANTITY,
+      });
+      return res.render("errorPage", {
+        msg: "Error 500. Error updating product.",
       });
     }
   }
@@ -85,10 +107,14 @@ class CartsController {
 
       const cart = await cartsService.getById(cid);
       if (!cart) {
-        return res.status(404).json({
-          status: "error",
-          message: "Cart does not exist",
-          payload: {},
+        CustomError.createError({
+          name: "Cart search error",
+          cause: "No cart found",
+          message: "Error trying to find a cart",
+          code: EErros.CART_NOT_FOUND,
+        });
+        return res.render("errorPage", {
+          msg: "Error 404. No cart found.",
         });
       }
       cart.products = cartDTO.products;
@@ -99,11 +125,14 @@ class CartsController {
         payload: cart,
       });
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({
-        status: "error",
-        message: "Failed to update products in cart",
-        payload: {},
+      CustomError.createError({
+        name: "Product update error",
+        cause: "Error updating product",
+        message: "Error trying to update the quantity of a product",
+        code: EErros.UPDATE_PRODUCT_QUANTITY,
+      });
+      return res.render("errorPage", {
+        msg: "Error 500. Error updating product.",
       });
     }
   }
@@ -114,20 +143,28 @@ class CartsController {
       const pid = req.params.pid;
       const cart = await cartsService.getById(cid);
       if (!cart) {
-        return res.status(404).json({
-          status: "error",
-          message: "Cart does not exist",
-          payload: {},
+        CustomError.createError({
+          name: "Cart search error",
+          cause: "No cart found",
+          message: "Error trying to find a cart",
+          code: EErros.CART_NOT_FOUND,
+        });
+        return res.render("errorPage", {
+          msg: "Error 404. No cart found.",
         });
       }
       const productToDeleteIndex = cart.products.findIndex(
         (product) => product.product._id.toString() === pid
       );
       if (productToDeleteIndex === -1) {
-        return res.status(404).json({
-          status: "error",
-          message: "Product does not exist in the cart",
-          payload: {},
+        CustomError.createError({
+          name: "Product search error",
+          cause: "No product found",
+          message: "Error trying to find a product",
+          code: EErros.PRODUCT_NOT_FOUND,
+        });
+        return res.render("errorPage", {
+          msg: "Error 404. No product found.",
         });
       }
       cart.products.splice(productToDeleteIndex, 1);
@@ -138,11 +175,13 @@ class CartsController {
         payload: cart,
       });
     } catch (error) {
-      return res.status(500).json({
-        status: "error",
-        message: "Failed to delete product from cart",
-        payload: {},
+      CustomError.createError({
+        name: "Cart product delete error",
+        cause: "Could not delete the product",
+        message: "Error trying to delete a product for cart",
+        code: EErros.CART_PRODUCT_DELETE,
       });
+      return res.render("errorPage", { msg: "Cart not found" });
     }
   }
 
@@ -151,15 +190,24 @@ class CartsController {
       const { cid, pid } = req.params;
       const productToAdd = await productsService.getById(pid);
       if (!productToAdd) {
-        return res
-          .status(404)
-          .render("errorPage", { msg: "Sorry, product not found." });
+        CustomError.createError({
+          name: "Product search error",
+          cause: "No product found",
+          message: "Error trying to find a product",
+          code: EErros.PRODUCT_NOT_FOUND,
+        });
+        return res.render("errorPage", { msg: "Sorry, product not found." });
       }
 
       const cart = await cartsService.getById(cid);
       if (!cart) {
+        CustomError.createError({
+          name: "Cart search error",
+          cause: "No cart found",
+          message: "Error trying to find a cart",
+          code: EErros.CART_NOT_FOUND,
+        });
         return res
-          .status(404)
           .render("errorPage", { msg: "Sorry, cart does not exist." });
       }
       const existingProduct = cart.products.find(
@@ -175,8 +223,13 @@ class CartsController {
 
       return res.status(201).redirect("/cart/" + cid);
     } catch (error) {
-      console.log(error);
-      return res.status(500).render("errorPage", {
+      CustomError.createError({
+        name: "Add product error",
+        cause: "Could not add product",
+        message: "Error trying to add a product to cart",
+        code: EErros.CART_NOT_FOUND,
+      });
+      return res.render("errorPage", {
         msg: "Error 500. Failed to add product to cart.",
       });
     }
@@ -193,16 +246,22 @@ class CartsController {
           payload: cart.products,
         });
       } else {
-        return res.status(404).json({
-          status: "error",
-          message: "Cart does not exist",
-          payload: {},
+        CustomError.createError({
+          name: "Cart search error",
+          cause: "No cart found",
+          message: "Error trying to find a cart",
+          code: EErros.CART_NOT_FOUND,
         });
+        return res.render("errorPage", { msg: "Cart not found" });
       }
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ status: "error", message: "Failed to get cart", payload: {} });
+    } catch {
+      CustomError.createError({
+        name: "Cart search error",
+        cause: "Failed to get cart",
+        message: "Error trying to get a cart",
+        code: EErros.CART_GET_ERROR,
+      });
+      return res.render("errorPage", { msg: "Failed to get cart" });
     }
   }
 
@@ -214,12 +273,14 @@ class CartsController {
         message: "Cart created successfully",
         payload: cart,
       });
-    } catch (error) {
-      return res.status(500).json({
-        status: "error",
-        message: "Failed to create cart",
-        payload: {},
+    } catch {
+      CustomError.createError({
+        name: "Cart create error",
+        cause: "Failed to create cart",
+        message: "Error trying to create a cart",
+        code: EErros.CART_CREATE_ERROR,
       });
+      return res.render("errorPage", { msg: "Failed to create cart" });
     }
   }
 
@@ -237,7 +298,7 @@ class CartsController {
           cartId: req.user ? req.user.cartId : req.session.cartId,
         };
       }
-      console.log(user)
+      console.log(user);
       const cid = req.params.cid;
       const mainTitle = "CART";
       const cart = await cartsService.getById(cid);
@@ -247,10 +308,14 @@ class CartsController {
       return res
         .status(200)
         .render("cart", { cart: cart.toObject(), mainTitle, user });
-    } catch (error) {
-      return res
-        .status(500)
-        .render("errorPage", { msg: "Error 500. Cart could not be rendered." });
+    } catch {
+        CustomError.createError({
+          name: "Cart render error",
+          cause: "Cart could not be rendered",
+          message: "Error trying to render a cart",
+          code: EErros.CART_RENDER_ERROR,
+        });
+        return res.render("errorPage", { msg: "Failed to render cart" });
     }
   }
 
