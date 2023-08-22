@@ -1,3 +1,4 @@
+import compression from "compression";
 import MongoStore from "connect-mongo";
 import cors from "cors";
 import express from "express";
@@ -7,10 +8,13 @@ import passport from "passport";
 import path from "path";
 import { __dirname } from "./config.js";
 import { iniPassport } from "./config/passport.config.js";
+import errorHandler from "./middlewares/error.js";
 import { cartRouter } from "./routes/cart.html.routes.js";
 import { cartsRouter } from "./routes/carts.routes.js";
 import { chatRouter } from "./routes/chat.routes.js";
+import { loggerTest } from "./routes/logger.test.routes.js";
 import { loginRouter } from "./routes/login.html.routes.js";
+import { mockingTest } from "./routes/mocking.test.routes.js";
 import { products } from "./routes/products.html.routes.js";
 import { productsRouter } from "./routes/products.routes.js";
 import { realTimeProducts } from "./routes/real-time-products.routes.js";
@@ -19,9 +23,6 @@ import { signupRouter } from "./routes/signup.html.routes.js";
 import { usersRouter } from "./routes/users.routes.js";
 import MongoSingleton from "./utils/singleton-db-connection.js";
 import { connectSocketServer } from "./utils/sockets-server.js";
-import { mockingTest } from "./routes/mocking.test.routes.js";
-import compression from "compression";
-import errorHandler from "./middlewares/error.js"
 
 const app = express();
 const PORT = 8080;
@@ -85,6 +86,7 @@ app.get("/error-auth", (req, res) => {
 
 // TESTING
 app.use("/mockingproducts", mockingTest)
+app.use("/loggerTest", loggerTest)
 
 app.get("*", (req, res) => {
   return res
