@@ -5,6 +5,8 @@ import { fakerES as faker } from "@faker-js/faker";
 
 dotenv.config();
 
+export const loggerEnvironment = process.env.LOGGER_ENV;
+
 export default {
   persistence: process.env.PERSISTENCE,
 };

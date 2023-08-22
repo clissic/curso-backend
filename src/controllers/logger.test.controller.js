@@ -1,24 +1,12 @@
-import { prodLogger, devLogger } from "../utils/logger.js";
+import { logger } from "../utils/logger.js";
 
 class LoggerTestController {
-  async prodLoggerTest(req, res) {
-    prodLogger.info("Production logger test process");
+  async loggerTest(req, res) {
+    logger.info("Logger test process");
     try {
       noExistingFunction();
     } catch (error) {
-      prodLogger.info({
-        message: error.message,
-      });
-    }
-    res.send({ message: "Finished testing." });
-  }
-
-  async devLoggerTest(req, res) {
-    devLogger.debug("Development logger test process");
-    try {
-      noExistingFunction();
-    } catch (error) {
-      devLogger.debug({
+      logger.info({
         message: error.message,
       });
     }
