@@ -24,6 +24,7 @@ switch (loggerEnvironment) {
   case "production":
     logger = winston.createLogger({
       levels: customLevelsOptions.levels,
+      colors: customLevelsOptions.colors,
       transports: [
         new winston.transports.File({
           filename: "./errors.log",

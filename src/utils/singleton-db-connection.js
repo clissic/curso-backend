@@ -10,7 +10,6 @@ export default class MongoSingleton {
     mongoose.connect(
       `mongodb+srv://joaquinperezcoria:${process.env.MONGODB_PASSWORD}@cluster0.zye6fyd.mongodb.net/?retryWrites=true&w=majority`,
     );
-    console.log("Plug to mongo!");
   }
 
   static getInstance() {

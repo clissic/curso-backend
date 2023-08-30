@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-class ProductManager {
+export default class ProductManager {
   constructor(path) {
     this.path = path;
     this.products = [];
@@ -101,4 +101,4 @@ class ProductManager {
   }
 }
 
-export const productsModel = new ProductManager("src/DAO/memory/products.json");
+export const productsMemory = new ProductManager("src/DAO/memory/products.json");

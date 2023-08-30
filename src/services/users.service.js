@@ -1,10 +1,12 @@
-import { userModel } from "../DAO/models/users.model.js";
-/* import { userModel } from "../DAO/models/users.memory.js"; */
+import importModels from "../DAO/factory.js";
+
+const models = await importModels();
+const usersModel = models.users
 
 class UserService {
   async getAll() {
     try {
-      return await userModel.getAll();
+      return await usersModel.getAll();
     } catch (error) {
       throw new Error("Failed to find users");
     }
@@ -12,7 +14,7 @@ class UserService {
 
   async findById(id) {
     try {
-      return await userModel.findById(id);
+      return await usersModel.findById(id);
     } catch (error) {
       throw new Error("Failed to find user by ID");
     }
@@ -20,7 +22,7 @@ class UserService {
 
   async create({ first_name, last_name, email, avatar, age, password }) {
     try {
-      return await userModel.create({
+      return await usersModel.create({
         first_name,
         last_name,
         email,
@@ -45,7 +47,7 @@ class UserService {
     cartId,
   }) {
     try {
-      return await userModel.updateOne({
+      return await usersModel.updateOne({
         _id,
         first_name,
         last_name,
@@ -63,7 +65,7 @@ class UserService {
 
   async deletOne({ _id }) {
     try {
-      return await userModel.deleteOne({ _id });
+      return await usersModel.deleteOne({ _id });
     } catch (error) {
       throw new Error("Failed to delete user by ID");
     }
@@ -71,7 +73,7 @@ class UserService {
 
   async findUserByEmail(email) {
     try {
-      return await userModel.findUserByEmail(email);
+      return await usersModel.findUserByEmail(email);
     } catch (error) {
       throw new Error("Failed to find user by email");
     }

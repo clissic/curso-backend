@@ -1,5 +1,7 @@
-import { cartsModel } from "../DAO/models/carts.model.js";
-/* import { cartsModel } from "../DAO/models/carts.memory.js"; */
+import importModels from "../DAO/factory.js";
+
+const models = await importModels();
+const cartsModel = models.carts
 
 class CartsService {
   async create() {

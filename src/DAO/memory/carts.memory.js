@@ -54,4 +54,4 @@ class CartManager {
   }
 }
 
-export const cartsModel = new CartManager()
+export const cartsMemory = new CartManager()

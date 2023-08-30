@@ -3,6 +3,7 @@ import CustomError from "../services/errors/custom-error.js";
 import EErros from "../services/errors/enums.js";
 import { productsService } from "../services/products.service.js";
 import { ticketsService } from "../services/tickets.service.js";
+import { logger } from "../utils/logger.js";
 import { generateRandomCode } from "../utils/random-code.js";
 import CartDTO from "./DTO/carts.dto.js";
 
@@ -162,22 +163,18 @@ class CartsController {
       const { cid, pid } = req.params;
       const productToAdd = await productsService.getById(pid);
       if (!productToAdd) {
-        CustomError.createError({
-          name: "Product search error",
-          cause: "No product found",
-          message: "Error trying to find a product",
-          code: EErros.PRODUCT_NOT_FOUND,
-        });
+        logger.debug(e);
+        return res
+          .status(500)
+          .render("errorPage", { msg: "Error trying to find a product" });
       }
 
       const cart = await cartsService.getById(cid);
       if (!cart) {
-        CustomError.createError({
-          name: "Cart search error",
-          cause: "No cart found",
-          message: "Error trying to find a cart",
-          code: EErros.CART_NOT_FOUND,
-        });
+        logger.debug(e);
+        return res
+          .status(500)
+          .render("errorPage", { msg: "Error trying to find a cart" });
       }
       const existingProduct = cart.products.find(
         (product) => product.product._id.toString() == pid
@@ -191,13 +188,11 @@ class CartsController {
       }
 
       return res.status(201).redirect("/cart/" + cid);
-    } catch (error) {
-      CustomError.createError({
-        name: "Add product error",
-        cause: "Could not add product",
-        message: "Error trying to add a product to cart",
-        code: EErros.CART_NOT_FOUND,
-      });
+    } catch (e) {
+        console.log(e);
+        return res
+          .status(500)
+          .render("errorPage", { msg: "Error trying to add a product to cart" });
     }
   }
 

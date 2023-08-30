@@ -1,4 +1,7 @@
-import { ticketsModel } from "../DAO/models/tickets.model.js";
+import importModels from "../DAO/factory.js";
+
+const models = await importModels();
+const ticketsModel = models.tickets
 
 class TicketsService {
   async create(code, purchase_datetime, amount, purchaser) {

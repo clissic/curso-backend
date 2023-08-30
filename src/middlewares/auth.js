@@ -16,6 +16,7 @@ export function checkAdmin(req, res, next) {
 }
 
 export function checkUser(req, res, next) {
+  console.log(req.session)
   if (req.session.user?.role == "user" || req.session.role == "user") {
     return next();
   }
