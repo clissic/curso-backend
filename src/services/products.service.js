@@ -3,6 +3,9 @@ import importModels from "../DAO/factory.js";
 const models = await importModels();
 const productsModel = models.products
 
+/* import { productsModel } from "../DAO/models/products.model.js"; */
+/* import { productsModel } from "../DAO/memory/products.memory.js"; */
+
 class ProductsService {
   async create(title, description, price, thumbnail, code, stock, category) {
     try {

@@ -14,43 +14,45 @@ switch (config.persistence) {
 
   default:
     break;
-} 
+}
 
 async function importModels() {
-	let models;
+  let models;
 
-	switch (config.persistence) {
-		case "MONGO":
+  switch (config.persistence) {
+    case "MONGO":
       const { productsModel } = await import("../DAO/models/products.model.js");
       const { usersModel } = await import("../DAO/models/users.model.js");
       const { cartsModel } = await import("../DAO/models/carts.model.js");
       const { ticketsModel } = await import("../DAO/models/tickets.model.js");
-			models = {
-				products: productsModel,
-				users: usersModel,
-				carts: cartsModel,
-				tickets: ticketsModel,
-			};
-			break;
+      models = {
+        products: productsModel,
+        users: usersModel,
+        carts: cartsModel,
+        tickets: ticketsModel,
+      };
+      break;
 
-		case "MEMORY":
+    case "MEMORY":
       const { productsMemory } = await import("../DAO/memory/products.memory.js");
       const { usersMemory } = await import("../DAO/memory/users.memory.js");
       const { cartsMemory } = await import("../DAO/memory/carts.memory.js");
       const { ticketsMemory } = await import("../DAO/memory/tickets.memory.js");
-			models = {
-				products: productsMemory,
-				users: usersMemory,
-				carts: cartsMemory,
-				tickets: ticketsMemory,
-			};
-			break;
+      models = {
+        products: productsMemory,
+        users: usersMemory,
+        carts: cartsMemory,
+        tickets: ticketsMemory,
+      };
+      break;
 
-		default:
-			throw new Error(`El tipo de persistencia "${config.persistence}" no es válido.`);
-	}
+    default:
+      throw new Error(
+        `El tipo de persistencia "${config.persistence}" no es válido.`
+      );
+  }
 
-	return models;
+  return models;
 }
 
 export default importModels;

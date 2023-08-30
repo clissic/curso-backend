@@ -3,6 +3,9 @@ import importModels from "../DAO/factory.js";
 const models = await importModels();
 const usersModel = models.users
 
+/* import { usersModel } from "../DAO/models/users.model.js"; */
+/* import { userModel } from "../DAO/models/users.memory.js"; */
+
 class UserService {
   async getAll() {
     try {

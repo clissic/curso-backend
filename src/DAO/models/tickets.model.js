@@ -1,6 +1,6 @@
 import { TicketsMongoose } from "./mongoose/tickets.mongoose.js";
 
-class TicketsModel {
+export default class TicketsModel {
   async create(code, purchase_datetime, amount, purchaser) {
     const newTicket = new TicketsMongoose({
       code,

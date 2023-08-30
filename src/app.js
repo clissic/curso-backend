@@ -21,7 +21,6 @@ import { realTimeProducts } from "./routes/real-time-products.routes.js";
 import { sessionsRouter } from "./routes/session.routes.js";
 import { signupRouter } from "./routes/signup.html.routes.js";
 import { usersRouter } from "./routes/users.routes.js";
-import MongoSingleton from "./utils/singleton-db-connection.js";
 import { connectSocketServer } from "./utils/sockets-server.js";
 
 const app = express();
@@ -33,7 +32,6 @@ const httpServer = app.listen(PORT, () => {
   );
 });
 
-MongoSingleton.getInstance();
 connectSocketServer(httpServer);
 
 app.use(session({

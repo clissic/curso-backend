@@ -1,6 +1,6 @@
 import { CartsMongoose } from "./mongoose/carts.mongoose.js";
 
-class CartModel {
+export default class CartModel {
     async create() {
         const cart = await CartsMongoose.create({products: []});
         return cart
