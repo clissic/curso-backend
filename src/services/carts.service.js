@@ -1,13 +1,9 @@
-/* import importModels from "../DAO/factory.js";
-
-const models = await importModels();
-const cartsModel = models.carts */
-
-import { cartsModel } from "../DAO/models/carts.model.js";
-/* import { cartsModel } from "../DAO/models/carts.memory.js"; */
+import importModels from "../DAO/factory.js";
 
 class CartsService {
   async create() {
+    const models = await importModels();
+    const cartsModel = models.carts
     try {
       return await cartsModel.create();
     } catch (error) {
@@ -16,6 +12,8 @@ class CartsService {
   }
 
   async getById(cid) {
+    const models = await importModels();
+    const cartsModel = models.carts
     try {
       return await cartsModel.getById(cid);
     } catch (error) {
@@ -24,6 +22,8 @@ class CartsService {
   }
 
   async getOneAndUpdate(cid, pid) {
+    const models = await importModels();
+    const cartsModel = models.carts
     try {
       return await cartsModel.getOneAndUpdate(cid, pid);
     } catch (error) {
@@ -32,6 +32,8 @@ class CartsService {
   }
 
   async removeProduct(cid, pid) {
+    const models = await importModels();
+    const cartsModel = models.carts
     try {
       return await cartsModel.removeProduct(cid, pid);
     } catch (error) {
@@ -40,6 +42,8 @@ class CartsService {
   }
 
   async getAllProducts(cid) {
+    const models = await importModels();
+    const cartsModel = models.carts
     try {
       const cartProducts = await cartsModel.getAllProducts(cid);
       return cartProducts;
