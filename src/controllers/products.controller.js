@@ -1,5 +1,6 @@
 import { ProductsMongoose } from "../DAO/models/mongoose/products.mongoose.js";
 import { productsService } from "../services/products.service.js";
+import { logger } from "../utils/logger.js";
 import ProductDTO from "./DTO/products.dto.js";
 
 class ProductsController {
@@ -270,7 +271,7 @@ class ProductsController {
         nextLink,
       });
     } catch (error) {
-      console.error("Failed to fetch products:", error);
+      logger.info("Failed to fetch products:", error);
       return res
         .status(500)
         .render("errorPage", { msg: "Error 500. Failed to fetch products." });
@@ -286,7 +287,7 @@ class ProductsController {
         .status(200)
         .render("real-time-products", { mainTitle, products: plainProducts });
     } catch (error) {
-      console.error("Failed to fetch products:", error);
+      logger.info("Failed to fetch products:", error);
       return res
         .status(500)
         .render("errorPage", { msg: "Error 500. Failed to fetch products." });

@@ -58,7 +58,6 @@ socket.on(
 const confirmCart = document.getElementById("confirmCart");
 const emptyCart = document.getElementById("emptyCart");
 const userEmail = document.getElementById("userEmail").value;
-console.log(userEmail);
 
 confirmCart.addEventListener("click", () => {
   fetch(`http://127.0.0.1:8080/api/carts/${cid}/purchase`, {
@@ -109,7 +108,7 @@ confirmCart.addEventListener("click", () => {
       }
     })
     .catch((error) => {
-      console.error("Error:", error);
+      console.log("Error:", error);
     });
 });
 
@@ -128,6 +127,6 @@ emptyCart.addEventListener("click", () => {
       console.log("Cart deleted:", data);
     })
     .catch((error) => {
-      console.error("Error:", error);
+      console.log("Error:", error);
     });
 });

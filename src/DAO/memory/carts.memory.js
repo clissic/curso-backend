@@ -1,4 +1,5 @@
 import fs from "fs";
+import { logger } from "../../utils/logger.js";
 
 class CartManager {
   constructor() {
@@ -36,7 +37,7 @@ class CartManager {
     if (cart) {
       return cart;
     } else {
-      return console.error("Cart not found");
+      return logger.info("Cart not found");
     }
   }
 

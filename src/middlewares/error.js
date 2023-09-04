@@ -1,7 +1,8 @@
 import EErros from "../services/errors/enums.js";
+import { logger } from "../utils/logger.js";
 
 export default (error, req, res, next) => {
-  console.log(error.cause);
+  logger.info(error.cause);
 
   switch (error.code) {
     case EErros.CART_NOT_FOUND:

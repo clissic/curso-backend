@@ -7,6 +7,7 @@ import session from "express-session";
 import passport from "passport";
 import path from "path";
 import { __dirname } from "./config.js";
+import env from "./config/env.config.js";
 import { iniPassport } from "./config/passport.config.js";
 import errorHandler from "./middlewares/error.js";
 import { cartRouter } from "./routes/cart.html.routes.js";
@@ -21,13 +22,15 @@ import { realTimeProducts } from "./routes/real-time-products.routes.js";
 import { sessionsRouter } from "./routes/session.routes.js";
 import { signupRouter } from "./routes/signup.html.routes.js";
 import { usersRouter } from "./routes/users.routes.js";
+import { logger } from "./utils/logger.js";
 import { connectSocketServer } from "./utils/sockets-server.js";
 
 const app = express();
-const PORT = 8080;
+const PORT = env.port;
+const MONGO_PASSWORD = env.mongoPassword;
 
 const httpServer = app.listen(PORT, () => {
-  console.log(
+  logger.info(
     `App running on ${__dirname} - server http://localhost:${PORT}`
   );
 });
@@ -35,11 +38,11 @@ const httpServer = app.listen(PORT, () => {
 connectSocketServer(httpServer);
 
 app.use(session({
-  secret: "A98dB973kWpfAF099Kmo", 
+  secret: "A98dB973kWpfAF099Kmo",
   resave: true, 
   saveUninitialized: true, 
   store: MongoStore.create({
-    mongoUrl: `mongodb+srv://joaquinperezcoria:${process.env.MONGODB_PASSWORD}@cluster0.zye6fyd.mongodb.net/?retryWrites=true&w=majority`,
+    mongoUrl: `mongodb+srv://joaquinperezcoria:${MONGO_PASSWORD}@cluster0.zye6fyd.mongodb.net/?retryWrites=true&w=majority`,
     mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true},
     ttl: 15000
   })

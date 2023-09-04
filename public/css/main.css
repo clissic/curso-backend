@@ -66,6 +66,12 @@
   font-size: 5vh;
 }
 
+#backMsg {
+  color: red;
+  font-weight: 600;
+  text-align: center;
+}
+
 .prods {
   display: flex;
   flex-direction: row;

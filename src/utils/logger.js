@@ -1,5 +1,7 @@
 import winston from "winston";
-import { loggerEnvironment } from "../config.js";
+import env from "../config/env.config.js";
+
+export const LOGGER_ENVIRONMENT = env.loggerEnv;
 
 const customLevelsOptions = {
   levels: {
@@ -20,11 +22,10 @@ const customLevelsOptions = {
 
 export let logger;
 
-switch (loggerEnvironment) {
+switch (LOGGER_ENVIRONMENT) {
   case "production":
     logger = winston.createLogger({
       levels: customLevelsOptions.levels,
-      colors: customLevelsOptions.colors,
       transports: [
         new winston.transports.File({
           filename: "./errors.log",

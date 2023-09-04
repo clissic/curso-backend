@@ -1,4 +1,5 @@
 import SessionDTO from "./DTO/sessions.dto.js";
+import { logger } from "../utils/logger.js";
 
 class SessionsController {
   async signup(req, res) {
@@ -34,7 +35,7 @@ class SessionsController {
       };
       return res.redirect("/products");
     } catch (err) {
-      console.error(err);
+      logger.info(err);
       return res
         .status(500)
         .render("errorPage", { msg: "Internal Server Error" });
@@ -63,7 +64,7 @@ class SessionsController {
 
   current(req, res) {
     const session = req.session.user || req.session;
-    console.log(session)
+    logger.info(JSON.stringify(session))
     const userDTO = new SessionDTO(session)
     res.send(userDTO);
     return userDTO

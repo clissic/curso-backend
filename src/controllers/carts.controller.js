@@ -189,7 +189,7 @@ class CartsController {
 
       return res.status(201).redirect("/cart/" + cid);
     } catch (e) {
-        console.log(e);
+        logger.info(e);
         return res
           .status(500)
           .render("errorPage", { msg: "Error trying to add a product to cart" });
@@ -256,7 +256,6 @@ class CartsController {
           cartId: req.user ? req.user.cartId : req.session.cartId,
         };
       }
-      console.log(user);
       const cid = req.params.cid;
       const mainTitle = "CART";
       const cart = await cartsService.getById(cid);

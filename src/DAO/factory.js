@@ -1,8 +1,10 @@
-import config from "../config.js";
+import env from "../config/env.config.js";
 import { logger } from "../utils/logger.js";
 import MongoSingleton from "../utils/singleton-db-connection.js";
 
-switch (config.persistence) {
+export const PERSISTENCE = env.persistence;
+
+switch (PERSISTENCE) {
   case "MONGO":
     logger.info("Database: MongoDB");
     MongoSingleton.getInstance();
@@ -19,17 +21,19 @@ switch (config.persistence) {
 async function importModels() {
   let models;
 
-  switch (config.persistence) {
+  switch (PERSISTENCE) {
     case "MONGO":
       const { productsModel } = await import("../DAO/models/products.model.js");
       const { usersModel } = await import("../DAO/models/users.model.js");
       const { cartsModel } = await import("../DAO/models/carts.model.js");
       const { ticketsModel } = await import("../DAO/models/tickets.model.js");
+      const { recoverTokensModel } = await import("../DAO/models/tokens.model.js")
       models = {
         products: productsModel,
         users: usersModel,
         carts: cartsModel,
         tickets: ticketsModel,
+        tokens: recoverTokensModel,
       };
       break;
 
@@ -38,11 +42,13 @@ async function importModels() {
       const { usersMemory } = await import("../DAO/memory/users.memory.js");
       const { cartsMemory } = await import("../DAO/memory/carts.memory.js");
       const { ticketsMemory } = await import("../DAO/memory/tickets.memory.js");
+      const { recoverTokensMemory } = await import("../DAO/memory/tokens.memory.js")
       models = {
         products: productsMemory,
         users: usersMemory,
         carts: cartsMemory,
         tickets: ticketsMemory,
+        tokens: recoverTokensMemory,
       };
       break;
 

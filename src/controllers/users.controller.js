@@ -1,8 +1,9 @@
 import { userService } from "../services/users.service.js";
 import { createHash } from "../utils/Bcrypt.js";
+import { logger } from "../utils/logger.js";
 import UserDTO from "./DTO/users.dto.js";
 
-class UserController {
+class UsersController {
   async getAll(req, res) {
     try {
       const users = await userService.getAll();
@@ -12,7 +13,7 @@ class UserController {
         payload: users,
       });
     } catch (e) {
-      console.log(e);
+      logger.info(e);
       return res.status(500).json({
         status: "error",
         msg: "Something went wrong",
@@ -44,10 +45,9 @@ class UserController {
   async create(req, res) {
     try {
       const { first_name, last_name, email, age, password } = req.body;
-      console.log(req.body)
       const userDTO = new UserDTO(first_name, last_name, email, age, createHash(password));
       if (!userDTO.first_name || !userDTO.last_name || !userDTO.email) {
-        console.log(
+        logger.info(
           "Validation error: please complete firstName, lastName and email."
         );
         return res.status(400).json({
@@ -63,7 +63,7 @@ class UserController {
         payload: userCreated,
       });
     } catch (e) {
-      console.log(e);
+      logger.info(e);
       return res.status(500).json({
         status: "error",
         msg: "Something went wrong",
@@ -77,7 +77,7 @@ class UserController {
       const { _id } = req.params;
       const { first_name, last_name, email } = req.body;
       if (!first_name || !last_name || !email || !_id) {
-        console.log(
+        logger.info(
           "Validation error: please complete firstName, lastName and email."
         );
         return res.status(400).json({
@@ -93,7 +93,7 @@ class UserController {
           last_name,
           email,
         });
-        console.log(userUpdated);
+        logger.info(JSON.stringify(userUpdated));
         if (userUpdated.matchedCount > 0) {
           return res.status(201).json({
             status: "success",
@@ -115,7 +115,7 @@ class UserController {
         });
       }
     } catch (e) {
-      console.log(e);
+      logger.info(e);
       return res.status(500).json({
         status: "error",
         msg: "something went wrong",
@@ -143,8 +143,8 @@ class UserController {
           payload: {},
         });
       }
-    } catch (e) {
-      console.log(e);
+    } catch(e) {
+      logger.info(e);
       return res.status(500).json({
         status: "error",
         msg: "Something went wrong",
@@ -154,4 +154,4 @@ class UserController {
   }
 }
 
-export const userController = new UserController();
+export const usersController = new UsersController();

@@ -1,14 +1,14 @@
 import express from "express";
-import { userController } from "../controllers/users.controller.js";
+import { usersController } from "../controllers/users.controller.js";
 
 export const usersRouter = express.Router();
 
-usersRouter.get("/", userController.getAll);
+usersRouter.get("/", usersController.getAll);
 
-usersRouter.get("/:id", userController.findById);
+usersRouter.get("/:id", usersController.findById);
 
-usersRouter.post("/", userController.create);
+usersRouter.post("/", usersController.create);
 
-usersRouter.put("/:_id", userController.updateOne);
+usersRouter.put("/:_id", usersController.updateOne);
 
-usersRouter.delete("/:_id", userController.deleteOne);
+usersRouter.delete("/:_id", usersController.deleteOne);

@@ -1,25 +1,26 @@
-import dotenv from "dotenv";
 import mongoose from "mongoose";
+import env from "../config/env.config.js";
+import { logger } from "./logger.js";
 
-dotenv.config();
+const MONGO_PASSWORD = env.mongoPassword
 
 export default class MongoSingleton {
   static instance;
 
   constructor() {
     mongoose.connect(
-      `mongodb+srv://joaquinperezcoria:${process.env.MONGODB_PASSWORD}@cluster0.zye6fyd.mongodb.net/?retryWrites=true&w=majority`,
+      `mongodb+srv://joaquinperezcoria:${MONGO_PASSWORD}@cluster0.zye6fyd.mongodb.net/?retryWrites=true&w=majority`,
     );
   }
 
   static getInstance() {
     if (this.instance) {
-        console.log("Already connected!");
+        logger.info("Already connected!");
         return this.instance;
     }
 
     this.instance = new MongoSingleton();
-    console.log("Connected!");
+    logger.info("Connected!");
     return this.instance;
   }
 }

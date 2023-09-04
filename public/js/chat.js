@@ -40,7 +40,6 @@ chatBox.addEventListener("keyup", ({ key }) => {
 });
 
 socket.on("listado_de_msgs", (msgs) => {
-  console.log(msgs);
   const divMsgs = document.getElementById("div-msgs");
   let formato = "";
   msgs.forEach((msg) => {

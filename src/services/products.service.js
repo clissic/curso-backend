@@ -1,4 +1,5 @@
 import importModels from "../DAO/factory.js";
+import { logger } from "../utils/logger.js";
 
 const models = await importModels();
 const productsModel = models.products
@@ -16,7 +17,7 @@ class ProductsService {
         category
       );
     } catch (error) {
-      throw console.error("Failed to create product: " + error);
+      throw logger.info("Failed to create product: " + error);
     }
   }
 

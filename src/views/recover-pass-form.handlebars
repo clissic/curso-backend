@@ -1,5 +1,5 @@
 <body class="loginBody">
-  <form class="log-container" action="/api/sessions/login" method="post">
+  <form class="log-container" action="/recover-form" method="post">
     <h1 class="firstTitle"><svg
         xmlns="http://www.w3.org/2000/svg"
         x="0px"
@@ -15,37 +15,43 @@
       iCommerce</h1>
     <h2 id="backMsg">{{msg}}</h2>
     <br />
-    <label class="labelClass" for="email">Email:</label>
+    <p>Please, type your new password an then confirm it:</p>
+    <br />
+    <h2 id="userEmail">{{email}}</h2>
+    <br />
+    <label class="labelClass" for="email" style="display: none;">Email:</label>
     <input
       class="inputClass"
+      type="email"
       name="email"
-      type="text"
       id="email"
-      placeholder=""
+      value="{{email}}"
+      style="display: none;"
       required
     />
-    <label class="labelClass" for="password">Password:</label>
+    <label class="labelClass" for="newPassword">New password:</label>
     <input
       class="inputClass"
-      name="password"
       type="password"
-      id="password"
+      name="newPassword"
+      id="newPassword"
       placeholder=""
       required
     />
-    <button class="submitBtn">LOG IN</button>
-    <a href="/api/sessions/github" class="loginGithubContainer">
-      <img
-        class="githubIcon"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/2048px-Octicons-mark-github.svg.png"
-        alt="github img"
-      />
-      <p>Login with GitHub</p>
-    </a>
-    <a class="registerBtn" href="/recover-form">Forgot password?</a>
+    <label class="labelClass" for="confirmPassword">Confirm password:</label>
+    <input
+      class="inputClass"
+      type="password"
+      name="confirmPassword"
+      id="confirmPassword"
+      placeholder=""
+      required
+    />
+    <button class="submitBtn" type="submit" id="setPassBtn">CHANGE PASSWORD</button>
+    <br />
     <div class="registerContainer">
-      <p>Do not have an account?</p><a class="registerBtn" href="/signup">SIGN
-        UP</a>
+      <p>Did you remember your password?</p><a class="registerBtn" href="/">LOG
+        IN</a>
     </div>
   </form>
 </body>

@@ -38,7 +38,7 @@ socket.on("productDeleted", async (deletedAndUpdatedProducts, productDeleted) =>
 // Escuchar evento 'productDeletionError' del servidor
 socket.on("productDeletionError", (errorMessage) => {
   Swal.fire({title: "Error deleting product:", text: errorMessage})
-  console.error("Error deleting product:", errorMessage);
+  console.log("Error deleting product:", errorMessage);
 });
 
 // AGREGAR UN PRODUCTO CON WEBSOCKETS
@@ -92,5 +92,5 @@ socket.on("productAdded", (createdAndUpdatedProducts, createdProduct) => {
 
 socket.on("productCreationError", async (errorMessage) => {
   Swal.fire({title: "Error creating product:", text: errorMessage})
-  console.error("Error creating product:", errorMessage);
+  console.log("Error creating product:", errorMessage);
 });

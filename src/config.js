@@ -1,15 +1,6 @@
+import { fakerES as faker } from "@faker-js/faker";
 import path from "path";
 import { fileURLToPath } from "url";
-import dotenv from "dotenv";
-import { fakerES as faker } from "@faker-js/faker";
-
-dotenv.config();
-
-export const loggerEnvironment = process.env.LOGGER_ENV;
-
-export default {
-  persistence: process.env.PERSISTENCE,
-};
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);

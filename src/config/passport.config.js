@@ -1,15 +1,15 @@
-import dotenv from "dotenv";
+import env from "../config/env.config.js"
 import fetch from "node-fetch";
 import passport from "passport";
 import GitHubStrategy from "passport-github2";
 import local from "passport-local";
 import { UserMongoose } from "../DAO/models/mongoose/users.mongoose.js";
-import { userController } from "../controllers/users.controller.js";
 import { cartsService } from "../services/carts.service.js";
 import { userService } from "../services/users.service.js";
 import { createHash, isValidPassword } from "../utils/Bcrypt.js";
+import { logger } from "../utils/logger.js";
 
-dotenv.config();
+const GITHUB_LOGIN_SECRET = env.githubSecret;
 const LocalStrategy = local.Strategy;
 
 export function iniPassport() {
@@ -21,11 +21,11 @@ export function iniPassport() {
         try {
           const user = await UserMongoose.findOne({ email: username });
           if (!user) {
-            console.log("User not found with username (email) " + username);
+            logger.info("User not found with username (email) " + username);
             return done(null, false);
           }
           if (!isValidPassword(password, user.password)) {
-            console.log("Invalid password");
+            logger.info("Invalid password");
             return done(null, false);
           }
           return done(null, user);
@@ -48,7 +48,7 @@ export function iniPassport() {
           const { first_name, last_name, email, age } = req.body;
           let user = await UserMongoose.findOne({ email: username });
           if (user) {
-            console.log("User already exists");
+            logger.info("User already exists");
             return done(null, false);
           }
 
@@ -62,12 +62,12 @@ export function iniPassport() {
             cartId: await cartsService.create(),
           };
           let userCreated = await userService.create(newUser);
-          console.log(userCreated);
-          console.log("User registration succesful");
+          logger.info(userCreated);
+          logger.info("User registration succesful");
           return done(null, userCreated);
         } catch (e) {
-          console.log("Error in register");
-          console.log(e);
+          logger.info("Error in register");
+          logger.info(e);
           return done(e);
         }
       }
@@ -79,11 +79,11 @@ export function iniPassport() {
     new GitHubStrategy(
       {
         clientID: "Iv1.5e0a43f2fd32b3ee",
-        clientSecret: process.env.GITHUB_LOGIN_SECRET,
+        clientSecret: GITHUB_LOGIN_SECRET,
         callbackURL: "http://localhost:8080/api/sessions/githubcallback",
       },
       async (accesToken, _, profile, done) => {
-        console.log(profile);
+        logger.info(JSON.stringify(profile));
         try {
           const res = await fetch("https://api.github.com/user/emails", {
             headers: {
@@ -114,15 +114,15 @@ export function iniPassport() {
               cartId: await cartsService.create(),
             };
             let userCreated = await userService.create(newUser);
-            console.log("User Registration succesful");
+            logger.info("User Registration succesful");
             return done(null, userCreated);
           } else {
-            console.log("User already exists");
+            logger.info("User already exists");
             return done(null, user);
           }
         } catch (e) {
-          console.log("Error en auth github");
-          console.log(e);
+          logger.info("Error en auth github");
+          logger.info(e);
           return done(e);
         }
       }

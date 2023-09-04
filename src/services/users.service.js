@@ -71,11 +71,19 @@ class UserService {
     }
   }
 
-  async findUserByEmail(email) {
+  async findByEmail(email) {
     try {
-      return await usersModel.findUserByEmail(email);
+      return await usersModel.findByEmail(email);
     } catch (error) {
       throw new Error("Failed to find user by email");
+    }
+  }
+
+  async updatePassword(email, newPassword) {
+    try {
+      return await usersModel.updatePassword({ email, newPassword });
+    } catch(error) {
+      throw new Error("Failed to update password");
     }
   }
 }

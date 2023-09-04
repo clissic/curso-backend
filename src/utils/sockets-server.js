@@ -3,25 +3,26 @@ import { MsgMongoose } from "../DAO/models/mongoose/msgs.mongoose.js";
 import { cartsController } from "../controllers/carts.controller.js";
 import { cartsService } from "../services/carts.service.js";
 import { productsService } from "../services/products.service.js";
+import { logger } from "./logger.js";
 
 export function connectSocketServer(httpServer) {
   const socketServer = new Server(httpServer);
 
   socketServer.on("connection", (socket) => {
-    console.log("Connected to socket " + socket.id);
+    logger.info("Connected to socket " + socket.id);
     
     // TEST CHAT
     socket.on("msg_front_to_back", async (msg) => {
       try {
         await MsgMongoose.create(msg);
       } catch (e) {
-        console.log(e);
+        logger.info(e);
       }
       try {
         const msgs = await MsgMongoose.find({});
         socketServer.emit("listado_de_msgs", msgs);
       } catch (e) {
-        console.log(e);
+        logger.info(e);
       }
     });
 
@@ -36,7 +37,7 @@ export function connectSocketServer(httpServer) {
           productDeleted
         );
       } catch (error) {
-        console.error(error);
+        logger.info(error);
         socketServer.emit("productDeletionError", error.message);
       }
     });
@@ -44,7 +45,7 @@ export function connectSocketServer(httpServer) {
     // AGREGAR PRODUCTO
     socket.on("addProduct", async (newProduct) => {
       try {
-        console.log(newProduct);
+        logger.info(JSON.stringify(newProduct));
         const createdProduct = await productsService.create(
           newProduct.title,
           newProduct.description,
@@ -57,7 +58,7 @@ export function connectSocketServer(httpServer) {
         const createdAndUpdatedProducts = await productsService.getAll();
         socket.emit("productAdded", createdAndUpdatedProducts, createdProduct);
       } catch (error) {
-        console.error(error);
+        logger.info(error);
         socket.emit("productCreationError", error.message);
       }
     });
@@ -95,10 +96,10 @@ export function connectSocketServer(httpServer) {
           cart.products.push({ product: pid, quantity: 1 });
           await cart.save();
         }
+        logger.info(JSON.stringify(cart));
         socket.emit("productAddedToCart", cart);
-        console.log(cart);
       } catch (error) {
-        console.error(error);
+        logger.info(error);
         socket.emit("productAddToCartError", error.message);
       }
     });
@@ -114,7 +115,7 @@ export function connectSocketServer(httpServer) {
           productDeleted
         );
       } catch (error) {
-        console.error(error);
+        logger.info(error);
         socketServer.emit("productDeletionError", error.message);
       }
     });

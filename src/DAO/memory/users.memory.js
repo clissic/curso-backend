@@ -1,6 +1,7 @@
 import fs from "fs";
 import { isValidPassword } from "../../utils/Bcrypt.js";
 import { cartsService } from "../../services/carts.service.js";
+import { logger } from "../../utils/logger.js";
 
 class UserManager {
   constructor() {
@@ -23,39 +24,39 @@ class UserManager {
     if (user && isValidPassword(password, user.password)) {
       return user;
     } else {
-      return console.error("No user found");
+      return logger.info("No user found");
     }
   }
 
-  findUser(email) {
+  findByEmail(email) {
     const user = this.users.find((user) => user.email === email);
     if (user) {
       return user;
     } else {
-      return console.error("No user found");
+      return logger.info("No user found");
     }
   }
 
   create(first_name, last_name, email, age, password) {
     if (!first_name) {
-      return console.error("A first_name is required");
+      return logger.info("A first_name is required");
     }
     if (!last_name) {
-      return console.error("A last_name is required");
+      return logger.info("A last_name is required");
     }
     if (!email) {
-      return console.error("An email is required");
+      return logger.info("An email is required");
     }
     if (!age && !isNaN(age)) {
-      return console.error("An age is required (in number)");
+      return logger.info("An age is required (in number)");
     }
     if (!password) {
-      return console.error("A password is required");
+      return logger.info("A password is required");
     }
 
     const notNewProductEmail = this.users.find((user) => user.email === email);
     if (notNewProductEmail) {
-      return console.error("This email is already in use");
+      return logger.info("This email is already in use");
     }
 
     let actualId = 0;
@@ -101,7 +102,7 @@ class UserManager {
   deleteOne(id) {
     const userToDelete = this.users.findIndex((user) => user.id === id);
     if (userToDelete === -1) {
-      return console.error("Product does not exist");
+      return logger.info("Product does not exist");
     }
     this.users.splice(userToDelete, 1);
     const usersString = JSON.stringify(this.users);

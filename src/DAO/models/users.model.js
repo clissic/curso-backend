@@ -44,7 +44,7 @@ export default class UsersModel {
     }
   }
 
-  async findUser(email) {
+  async findByEmail(email) {
     const user = await UserMongoose.findOne(
       { email: email },
       {
@@ -108,6 +108,15 @@ export default class UsersModel {
   async deleteOne(_id) {
     const result = await UserMongoose.deleteOne({ _id: _id });
     return result;
+  }
+
+  async updatePassword({ email, newPassword }) {
+    const userUpdated = await UserMongoose.updateOne(
+      { email: email },
+      {
+        password: newPassword,
+      }
+    );
   }
 }
 
