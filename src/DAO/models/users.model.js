@@ -1,5 +1,6 @@
 import { cartsService } from "../../services/carts.service.js";
 import { isValidPassword } from "../../utils/Bcrypt.js";
+import { logger } from "../../utils/logger.js";
 import { UserMongoose } from "../models/mongoose/users.mongoose.js";
 
 export default class UsersModel {
@@ -110,7 +111,7 @@ export default class UsersModel {
     return result;
   }
 
-  async updatePassword({ email, newPassword }) {
+  async updatePassword(email, newPassword) {
     const userUpdated = await UserMongoose.updateOne(
       { email: email },
       {
