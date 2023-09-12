@@ -13,16 +13,24 @@ class ProductsController {
         payload: allProducts,
       });
     } catch (error) {
-      return res.status(500).json({ error: "Internal server error" });
+      logger.error(
+        "Error finding products in products.controller: " + error
+      );
+      return res.status(500).render("errorPage", {
+        msg: "Error finding product.",
+      });
     }
   }
 
   async create(req, res) {
     try {
       if (!req.file) {
-        return res
-          .status(400)
-          .json({ status: "error", message: "Uploading a file is mandatory" });
+        logger.error(
+          "Uploading a file is mandatory in products.controller"
+        );
+        return res.status(400).render("errorPage", {
+          msg: "Uploading a file is mandatory.",
+        });
       }
       const { title, description, price, code, stock, category } = req.body;
       const thumbnail = req.file.filename;
@@ -50,7 +58,12 @@ class ProductsController {
         payload: newProduct,
       });
     } catch (error) {
-      return res.status(500).json({ error: "Internal server error" });
+      logger.error(
+        "Error creating product in products.controller: " + error
+      );
+      return res.status(500).render("errorPage", {
+        msg: "Error creating product.",
+      });
     }
   }
 
@@ -106,7 +119,7 @@ class ProductsController {
         : null;
       return res.status(200).json({
         status: "success",
-        msg: "Listado de productos",
+        msg: "Products list",
         payload: {
           paginatedProd,
           totalDocs,
@@ -122,7 +135,12 @@ class ProductsController {
         },
       });
     } catch (error) {
-      return res.status(500).json({ error: "Internal server error" });
+      logger.error(
+        "Error getting products and pagination in products.controller: " + error
+      );
+      return res.status(500).render("errorPage", {
+        msg: "Error getting products and pagination.",
+      });
     }
   }
 
@@ -137,12 +155,20 @@ class ProductsController {
           payload: product,
         });
       } else {
-        return res
-          .status(404)
-          .json({ status: "error", message: "Product does not exist" });
+        logger.error(
+          "Product by ID not found in products.controller (getById)"
+        );
+        return res.status(404).render("errorPage", {
+          msg: "Product by ID not found.",
+        });
       }
     } catch (error) {
-      return res.status(500).json({ error: "Internal server error" });
+      logger.error(
+        "Error getting product by id in products.controller: " + error
+      );
+      return res.status(500).render("errorPage", {
+        msg: "Error getting product by id.",
+      });
     }
   }
 
@@ -161,12 +187,20 @@ class ProductsController {
           payload: updatedProduct,
         });
       } else {
-        return res
-          .status(404)
-          .json({ status: "error", message: "Product does not exist" });
+        logger.error(
+          "Product by ID not found in products.controller (getByIdAndUpdate)"
+        );
+        return res.status(404).render("errorPage", {
+          msg: "Product by ID not found.",
+        });
       }
     } catch (error) {
-      return res.status(500).json({ error: "Internal server error" });
+      logger.error(
+        "Error updating product by ID in products.controller (getByIdAndUpdate): " + error
+      );
+      return res.status(404).render("errorPage", {
+        msg: "Error updating product by ID.",
+      });
     }
   }
 
@@ -177,14 +211,22 @@ class ProductsController {
       if (deletedProduct) {
         return res
           .status(200)
-          .json({ status: "success", message: "Product deleted successfully" });
+          .json({ status: "success", message: "Product deleted successfully", payload: [] });
       } else {
-        return res
-          .status(404)
-          .json({ status: "error", message: "Product does not exist" });
+        logger.error(
+          "Product by ID not found in products.controller (getByIdAndDelete)"
+        );
+        return res.status(404).render("errorPage", {
+          msg: "Product by ID not found.",
+        });
       }
     } catch (error) {
-      return res.status(500).json({ error: "Internal server error" });
+      logger.error(
+        "Error deleting product by ID in products.controller (getByIdAndDelete): " + error
+      );
+      return res.status(500).render("errorPage", {
+        msg: "Error deleting product by ID.",
+      });
     }
   }
 
@@ -271,7 +313,7 @@ class ProductsController {
         nextLink,
       });
     } catch (error) {
-      logger.info("Failed to fetch products:", error);
+      logger.error("Failed to fetch products: " + error);
       return res
         .status(500)
         .render("errorPage", { msg: "Error 500. Failed to fetch products." });
@@ -287,7 +329,7 @@ class ProductsController {
         .status(200)
         .render("real-time-products", { mainTitle, products: plainProducts });
     } catch (error) {
-      logger.info("Failed to fetch products:", error);
+      logger.error("Failed to fetch products: " + error);
       return res
         .status(500)
         .render("errorPage", { msg: "Error 500. Failed to fetch products." });

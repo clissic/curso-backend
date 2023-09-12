@@ -1,0 +1,193 @@
+paths:
+  /api/products:
+    get:
+      summary: Recive product list to render with pagination
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Products list successfully gotten
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/prodSuccess"
+        "500":
+          description: Server error geting products and pagination
+    post:
+      summary: Create new product
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          multipart/from-data:
+            schema:
+              $ref: "#/components/requestBodies/newProduct"
+      responses:
+        "201":
+          description: Product created
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Success"
+        "400":
+          description: You have to upload a file mandatory
+        "500":
+          description: Server error creating product
+  /api/products/{pid}:
+    get:
+      summary: Get product by ID
+      tags:
+      - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID of the product wanted
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Product found
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Success"
+        "404":
+          description: Product not found
+        "500":
+          description: Server error finding product
+    put:
+      summary: Modify product by ID (any property)
+      tags:
+      - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: ID of the product wanted
+        schema:
+          $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateProduct"
+      responses:
+        "200":
+          description: Product modified successfully
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Success"
+        "404":
+          description: Product by ID not found
+        "500":
+          description: Server error updating a product
+    delete:
+      summary: Delete a product by ID
+      tags:
+      - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: ID of the product wanted
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Product successfully deleted
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Success"
+        "404":
+          description: Product by ID not found
+        "500":
+          description: Server error deleting product
+
+components:
+  schemas:
+    prodSuccess:
+      type: array
+      properties:
+        status:
+          type: String
+          description: Success confirmation
+        message:
+          type: String
+          description: Description of what happened
+        payload:
+          type: Array
+          description: Server response
+      example:
+        status: success
+        message: Succes message depending on endpoint
+        payload: [ 
+          paginatedProd: [],
+          totalDocs: 22,
+          limit: 10,
+          totalPages: 3,
+          prevPage: null,
+          nextPage: 2,
+          page: 1,
+          hasPrevPage: false,
+          hasNextPage: true,
+          prevLink: null,
+          nextLink: "/api/products?currentPage=2&prodLimit=&sort=&query="
+          ]
+
+  requestBodies:
+    newProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the product.
+        description:
+          type: string
+          description: The description of the product.
+        price:
+          type: number
+          description: The price of the product.
+        code:
+          type: string
+          description: The product code.
+        stock:
+          type: integer
+          description: The stock quantity of the product.
+        category:
+          type: string
+          description: The category of the product.
+        thumbnail:
+          type: string
+          format: binary
+          description: The product thumbnail image (upload a file).
+      example:
+        title: Guitarra
+        description: Fabricada en madera, industria uruguaya
+        price: 1000
+        code: G1
+        stock: 15
+        category: instrumentos
+        thumbnail: https://media.istockphoto.com/id/505288924/es/foto/cl%C3%A1sica-guitarra-ac%C3%BAstica.jpg?s=612x612&w=0&k=20&c=GywdmUErxXB-q2q9QKmH1JrA4N5LX9GBXmlEeP2nXRU=
+    updateProduct:
+      type: object
+      properties:
+        price:
+          type: nunmber
+          description: The parameter of the product you want to modify
+      example:
+        price: 150

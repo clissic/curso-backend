@@ -267,7 +267,8 @@ components:
     userEmail:
       type: object
       properties:
-        email: String
-        description: Email of the session (user)
+        email:
+          type: string
+          description: Email of the session (user)
       example:
         userEmail: example@email.com
