@@ -1,0 +1,273 @@
+paths:
+  /api/carts:
+    post:
+      summary: Create a cart
+      tags:
+        - Carts
+      responses:
+        "201":
+          description: Cart created successfully
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Success"
+        "500":
+          description: Server error creating cart for the user
+  /api/carts/{cid}:
+    get:
+      summary: Get a cart by ID (protected by auth middleware)
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID of the cart wanted
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Cart found
+          content:
+            aplication/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart"
+        "404":
+          description: Cart not found
+        "500":
+          description: Server error trying to get a cart
+    delete:
+      summary: Delete all products from cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID of the cart wanted
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: All products deleted from cart
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Success"
+        "404":
+          description: Cart not found
+        "500": 
+          description: Server error trying to delete all products from cart
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Update (add) product in cart (protected by auth middleware)
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID of the cart wanted
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: ID of the product wanted
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Product added to cart
+        "404":
+          description: Product / cart not found
+        "500":
+          description: Server error trying to add a product to cart
+    put:
+      summary: Modify quantity of products in cart (protected by auth middleware)
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID of the cart wanted
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: ID of the product wanted
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateQuantityProduct"
+      responses:
+        "200":
+          description: Product quantity updated in cart
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Success"
+        "404":
+          description: Product / cart not found
+        "500":
+          description: Server error trying to update the quantity of a product
+    delete:
+      summary: Delete a prodcut from cart (protected by auth middleware)
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID of the cart wanted
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: ID of the product wanted
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Product deleted from cart
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Success"
+        "404":
+          description: Product / cart not found
+        "500":
+          description: Server error trying to delete a product in cart
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Purchase process
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID of the cart wanted
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/userEmail"
+      responses:
+        "200":
+          description: Purchase successfully processed
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/TicketSuccess"
+        "404":
+          description: Cart not found
+        "406":
+          description: All selected products have insufficient stock
+        "500":
+          description: Server error processing purchase
+
+components:
+  schemas:
+    Success:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Success confirmation
+        message:
+          type: String
+          description: Description of what happened
+        payload:
+          type: Array
+          description: Server response
+      example:
+        status: success
+        message: Succes message depending on endpoint
+        payload: [ 
+          _id: ObjectId("64cd9909a5243f46e9b096d1"),
+          products: [],
+          __v: 0
+          ]
+    TicketSuccess:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Success confirmation
+        message:
+          type: String
+          description: Description of what happened
+        payload:
+          type: Array
+          description: Server response
+        noStock:
+          type: Array
+          description: Products without stock
+      example:
+        status: success
+        message: Succes message depending on endpoint
+        payload: [ 
+          _id: ObjectId("64efceb1341e63fdedf35ea5"),
+          code: vAYxaUP8e702gxyc4fOv,
+          purchase_datetime: 1693437617994,
+          amount: 500,
+          purchaser: "example@email.com",
+          __v: 0
+          ]
+        noStock: []
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Autogenerated ID by mongo
+        products:
+          type: array
+          description: Array of products in cart
+        __v:
+          type: number
+          description: Autogenerated V by mongo
+      example:
+        _id: ObjectId("64cd9909a5243f46e9b096d1")
+        products: []
+        __v: 0
+
+  requestBodies:
+    updateQuantityProduct:
+      type: object
+      properties:
+        quantity:
+          type: nunmber
+          description: The quantity of the product
+      example:
+        quantity: 3
+    userEmail:
+      type: object
+      properties:
+        email: String
+        description: Email of the session (user)
+      example:
+        userEmail: example@email.com

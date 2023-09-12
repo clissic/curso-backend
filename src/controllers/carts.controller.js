@@ -1,6 +1,4 @@
 import { cartsService } from "../services/carts.service.js";
-import CustomError from "../services/errors/custom-error.js";
-import EErros from "../services/errors/enums.js";
 import { productsService } from "../services/products.service.js";
 import { ticketsService } from "../services/tickets.service.js";
 import { logger } from "../utils/logger.js";
@@ -13,12 +11,12 @@ class CartsController {
       const cid = req.params.cid;
       const cart = await cartsService.getById(cid);
       if (!cart) {
-        CustomError.createError({
-          name: "Cart search error",
-          cause: "No cart found",
-          message: "Error trying to find a cart",
-          code: EErros.CART_NOT_FOUND,
-        });
+        logger.error(
+          "Error trying to find a cart in carts.controller (deleteAllProdInCart)"
+        );
+        return res
+          .status(404)
+          .render("errorPage", { msg: "Error trying to find a cart" });
       }
       cart.products = [];
       await cart.save();
@@ -28,11 +26,12 @@ class CartsController {
         payload: cart,
       });
     } catch (error) {
-      CustomError.createError({
-        name: "Cart product delete error",
-        cause: "Could not delete the product",
-        message: "Error trying to delete a product for cart",
-        code: EErros.CART_PRODUCT_DELETE,
+      logger.error(
+        "Error trying to delete all products from cart in carts.controller: " +
+          error
+      );
+      return res.status(500).render("errorPage", {
+        msg: "Error trying to delete all products from cart",
       });
     }
   }
@@ -45,24 +44,24 @@ class CartsController {
 
       const cart = await cartsService.getById(cid);
       if (!cart) {
-        CustomError.createError({
-          name: "Cart search error",
-          cause: "No cart found",
-          message: "Error trying to find a cart",
-          code: EErros.CART_NOT_FOUND,
-        });
+        logger.error(
+          "Error trying to find a cart in carts.controller (modQuantProdInCartById)"
+        );
+        return res
+          .status(404)
+          .render("errorPage", { msg: "Error trying to find a cart" });
       }
 
       const productIndex = cart.products.findIndex(
         (product) => product.product._id.toString() === pid
       );
       if (productIndex === -1) {
-        CustomError.createError({
-          name: "Product search error",
-          cause: "No product found",
-          message: "Error trying to find a product",
-          code: EErros.PRODUCT_NOT_FOUND,
-        });
+        logger.error(
+          "Error trying to find a product in carts.controller (modQuantProdInCartById)"
+        );
+        return res
+          .status(404)
+          .render("errorPage", { msg: "Error trying to find a product" });
       }
 
       cart.products[productIndex].quantity = quantity;
@@ -75,45 +74,15 @@ class CartsController {
         payload: cart,
       });
     } catch (error) {
-      CustomError.createError({
-        name: "Product update error",
-        cause: "Error updating product",
-        message: "Error trying to update the quantity of a product",
-        code: EErros.UPDATE_PRODUCT_QUANTITY,
-      });
-    }
-  }
-
-  async modProdInCart(req, res) {
-    try {
-      const cid = req.params.cid;
-      const productsToUpdate = req.body.products;
-
-      const cartDTO = new CartDTO(productsToUpdate);
-
-      const cart = await cartsService.getById(cid);
-      if (!cart) {
-        CustomError.createError({
-          name: "Cart search error",
-          cause: "No cart found",
-          message: "Error trying to find a cart",
-          code: EErros.CART_NOT_FOUND,
+      logger.error(
+        "Error trying to update the quantity of a product in carts.controller (modProdInCartById): " +
+          error
+      );
+      return res
+        .status(500)
+        .render("errorPage", {
+          msg: "Error trying to update the quantity of a product.",
         });
-      }
-      cart.products = cartDTO.products;
-      await cart.save();
-      return res.status(200).json({
-        status: "success",
-        message: "Products updated in cart",
-        payload: cart,
-      });
-    } catch (error) {
-      CustomError.createError({
-        name: "Product update error",
-        cause: "Error updating product",
-        message: "Error trying to update the quantity of a product",
-        code: EErros.UPDATE_PRODUCT_QUANTITY,
-      });
     }
   }
 
@@ -123,23 +92,23 @@ class CartsController {
       const pid = req.params.pid;
       const cart = await cartsService.getById(cid);
       if (!cart) {
-        CustomError.createError({
-          name: "Cart search error",
-          cause: "No cart found",
-          message: "Error trying to find a cart",
-          code: EErros.CART_NOT_FOUND,
-        });
+        logger.error(
+          "Error trying to find a cart in carts.controller (productToDeleteById)"
+        );
+        return res
+          .status(404)
+          .render("errorPage", { msg: "Error trying to find a cart" });
       }
       const productToDeleteIndex = cart.products.findIndex(
         (product) => product.product._id.toString() === pid
       );
       if (productToDeleteIndex === -1) {
-        CustomError.createError({
-          name: "Product search error",
-          cause: "No product found",
-          message: "Error trying to find a product",
-          code: EErros.PRODUCT_NOT_FOUND,
-        });
+        logger.error(
+          "Error trying to find a product in carts.controller (productToDeleteById)"
+        );
+        return res
+          .status(404)
+          .render("errorPage", { msg: "Error trying to find a product" });
       }
       cart.products.splice(productToDeleteIndex, 1);
       await cart.save();
@@ -149,11 +118,12 @@ class CartsController {
         payload: cart,
       });
     } catch (error) {
-      CustomError.createError({
-        name: "Cart product delete error",
-        cause: "Could not delete the product",
-        message: "Error trying to delete a product for cart",
-        code: EErros.CART_PRODUCT_DELETE,
+      logger.error(
+        "Error trying to delete a product from cart in carts.controller (productToDeleteById): " +
+          error
+      );
+      return res.status(500).render("errorPage", {
+        msg: "Error trying to delete a product in cart",
       });
     }
   }
@@ -163,17 +133,21 @@ class CartsController {
       const { cid, pid } = req.params;
       const productToAdd = await productsService.getById(pid);
       if (!productToAdd) {
-        logger.debug(e);
+        logger.error(
+          "Error trying to find a product in carts.controller (getOneAndUpdate)"
+        );
         return res
-          .status(500)
+          .status(404)
           .render("errorPage", { msg: "Error trying to find a product" });
       }
 
       const cart = await cartsService.getById(cid);
       if (!cart) {
-        logger.debug(e);
+        logger.error(
+          "Error trying to find a cart in carts.controller (getOneAndUpdate)"
+        );
         return res
-          .status(500)
+          .status(404)
           .render("errorPage", { msg: "Error trying to find a cart" });
       }
       const existingProduct = cart.products.find(
@@ -186,13 +160,14 @@ class CartsController {
         cart.products.push({ product: pid, quantity: 1 });
         await cart.save();
       }
-
-      return res.status(201).redirect("/cart/" + cid);
-    } catch (e) {
-        logger.info(e);
-        return res
-          .status(500)
-          .render("errorPage", { msg: "Error trying to add a product to cart" });
+      return res.status(200).redirect("/cart/" + cid);
+    } catch (error) {
+      logger.error(
+        "Error trying to add a product to cart in carts.controller: " + error
+      );
+      return res
+        .status(500)
+        .render("errorPage", { msg: "Error trying to add a product to cart" });
     }
   }
 
@@ -207,19 +182,15 @@ class CartsController {
           payload: cart.products,
         });
       } else {
-        CustomError.createError({
-          name: "Cart search error",
-          cause: "No cart found",
-          message: "Error trying to find a cart",
-          code: EErros.CART_NOT_FOUND,
+        logger.error("Error finding a cart for the user in carts.controller");
+        res.status(404).render("errorPage", {
+          msg: "Cart not found.",
         });
       }
-    } catch {
-      CustomError.createError({
-        name: "Cart search error",
-        cause: "Failed to get cart",
-        message: "Error trying to get a cart",
-        code: EErros.CART_GET_ERROR,
+    } catch (error) {
+      logger.error("Error trying to get a cart in carts.controller: " + error);
+      return res.status(500).render("errorPage", {
+        msg: "Error trying to get a cart.",
       });
     }
   }
@@ -227,17 +198,17 @@ class CartsController {
   async create(req, res) {
     try {
       const cart = await cartsService.create();
-      return res.status(200).json({
+      return res.status(201).json({
         status: "success",
         message: "Cart created successfully",
         payload: cart,
       });
-    } catch {
-      CustomError.createError({
-        name: "Cart create error",
-        cause: "Failed to create cart",
-        message: "Error trying to create a cart",
-        code: EErros.CART_CREATE_ERROR,
+    } catch (error) {
+      logger.error(
+        "Error creating cart for the user in carts.controller: " + error
+      );
+      return res.status(500).render("errorPage", {
+        msg: "Error creating cart for the user.",
       });
     }
   }
@@ -260,18 +231,24 @@ class CartsController {
       const mainTitle = "CART";
       const cart = await cartsService.getById(cid);
       if (!cart) {
-        return res.status(404).render("errorPage", { msg: "Cart not found" });
+        logger.error(
+          "Error trying to find a cart in carts.controller (getByIdAndRender)"
+        );
+        return res
+          .status(404)
+          .render("errorPage", { msg: "Error trying to find a cart" });
       }
       return res
         .status(200)
         .render("cart", { cart: cart.toObject(), mainTitle, user });
-    } catch {
-        CustomError.createError({
-          name: "Cart render error",
-          cause: "Cart could not be rendered",
-          message: "Error trying to render a cart",
-          code: EErros.CART_RENDER_ERROR,
-        });
+    } catch (error) {
+      logger.error(
+        "Error trying to get a cart and rendering it in carts.controller: " +
+          error
+      );
+      res.status(500).render("errorPage", {
+        msg: "Error trying to get a cart and rendering it.",
+      });
     }
   }
 
@@ -279,18 +256,17 @@ class CartsController {
     try {
       const cid = req.params.cid;
       const userEmail = req.body.email;
-  
+
       const cart = await cartsService.getById(cid);
       if (!cart) {
-        return res.status(404).json({
-          status: "error",
-          message: "Cart does not exist",
-          payload: {},
+        logger.error("Error trying to get a cart in carts.controller");
+        return res.status(404).render("errorPage", {
+          msg: "Error trying to find a cart.",
         });
       }
-  
+
       const productsWithInsufficientStock = [];
-  
+
       let totalPrice = 0;
       for (const product of cart.products) {
         const { product: pid, quantity } = product;
@@ -302,16 +278,20 @@ class CartsController {
           productsWithInsufficientStock.push(product);
         }
       }
-  
+
       cart.products = productsWithInsufficientStock;
       await cart.save();
-  
+
       if (totalPrice > 0) {
         const purchase_datetime = Date.now();
         const code = generateRandomCode();
         const purchaser = userEmail;
-        const ticket = await ticketsService.create(code, purchase_datetime, totalPrice, purchaser);
-  
+        const ticket = await ticketsService.create(
+          code,
+          purchase_datetime,
+          totalPrice,
+          purchaser
+        );
         return res.status(200).json({
           status: "success",
           message: "Purchase successfully processed",
@@ -319,17 +299,17 @@ class CartsController {
           noStock: cart.products,
         });
       } else {
-        return res.status(400).json({
-          status: "error",
-          message: "All selected products have insufficient stock",
-          payload: {},
+        logger.error(
+          "All selected products have insufficient stock in carts.controller"
+        );
+        return res.status(406).render("errorPage", {
+          msg: "All selected products have insufficient stock.",
         });
       }
     } catch (error) {
-      return res.status(500).json({
-        status: "error",
-        message: "Failed to process purchase",
-        payload: {},
+      logger.error("Error processing purchase in carts.controller: " + error);
+      res.status(500).render("errorPage", {
+        msg: "Error processing purchase.",
       });
     }
   }

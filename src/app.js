@@ -24,6 +24,8 @@ import { signupRouter } from "./routes/signup.html.routes.js";
 import { usersRouter } from "./routes/users.routes.js";
 import { logger } from "./utils/logger.js";
 import { connectSocketServer } from "./utils/sockets-server.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 const app = express();
 const PORT = env.port;
@@ -50,6 +52,19 @@ app.use(session({
 
 app.use(cors());
 app.use(compression());
+
+// CONFIG DE SWAGGER (DOCUMENTACION)
+const specs = swaggerJSDoc({
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "iCommerce Documentation",
+      description: "Documentation for the iCommerce API endpoints.",
+    },
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`],
+});
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 // MIDDLEWARES
 app.use(express.json());

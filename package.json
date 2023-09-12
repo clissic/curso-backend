@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/app.js --mode PRODUCTION",
-    "dev": "nodemon ./src/app.js --mode DEVELOPMENT"
+    "dev": "nodemon -e yaml,js ./src/app.js --mode DEVELOPMENT"
   },
   "keywords": [],
   "author": "",
@@ -37,6 +37,8 @@
     "session-file-store": "^1.5.0",
     "socket.io": "^4.6.1",
     "socket.io-session": "^0.0.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "winston": "^3.10.0"
   },
   "devDependencies": {
