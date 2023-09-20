@@ -45,8 +45,7 @@ app.use(session({
   saveUninitialized: true, 
   store: MongoStore.create({
     mongoUrl: `mongodb+srv://joaquinperezcoria:${MONGO_PASSWORD}@cluster0.zye6fyd.mongodb.net/?retryWrites=true&w=majority`,
-    mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true},
-    ttl: 15000
+    mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true}
   })
 }));
 

@@ -78,11 +78,9 @@ class CartsController {
         "Error trying to update the quantity of a product in carts.controller (modProdInCartById): " +
           error
       );
-      return res
-        .status(500)
-        .render("errorPage", {
-          msg: "Error trying to update the quantity of a product.",
-        });
+      return res.status(500).render("errorPage", {
+        msg: "Error trying to update the quantity of a product.",
+      });
     }
   }
 
@@ -197,11 +195,13 @@ class CartsController {
 
   async create(req, res) {
     try {
-      const cart = await cartsService.create();
+      const products = [];
+      const cartDTO = new CartDTO(products);
+      const newCart = await cartsService.create(cartDTO.products);
       return res.status(201).json({
         status: "success",
         message: "Cart created successfully",
-        payload: cart,
+        payload: newCart,
       });
     } catch (error) {
       logger.error(
@@ -310,6 +310,35 @@ class CartsController {
       logger.error("Error processing purchase in carts.controller: " + error);
       res.status(500).render("errorPage", {
         msg: "Error processing purchase.",
+      });
+    }
+  }
+
+  async getByIdAndDelete(req, res) {
+    try {
+      const { cid } = req.params;
+      const deletedCart = await cartsService.getByIdAndDelete(cid);
+      if (deletedCart) {
+        return res.status(200).json({
+          status: "success",
+          message: "Cart deleted successfully",
+          payload: [],
+        });
+      } else {
+        logger.error(
+          "Cart by ID not found in carts.controller (getByIdAndDelete)"
+        );
+        return res.status(404).render("errorPage", {
+          msg: "Cart by ID not found.",
+        });
+      }
+    } catch (error) {
+      logger.error(
+        "Error deleting cart by ID in carts.controller (getByIdAndDelete): " +
+          error
+      );
+      return res.status(500).render("errorPage", {
+        msg: "Error deleting cart by ID.",
       });
     }
   }

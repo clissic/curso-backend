@@ -1,7 +1,7 @@
 import { ProductsMongoose } from "./mongoose/products.mongoose.js";
 
 export default class ProductsModel {
-  async create(title, description, price, thumbnail, code, stock, category) {
+  async create(title, description, price, thumbnail, code, stock, category, status, owner) {
     const newProduct = new ProductsMongoose({
       title,
       description,
@@ -10,6 +10,8 @@ export default class ProductsModel {
       code,
       stock,
       category,
+      status,
+      owner,
     });
     await newProduct.save();
     return newProduct;
@@ -38,11 +40,6 @@ export default class ProductsModel {
     const deletedProduct = await ProductsMongoose.findByIdAndDelete(id);
     return deletedProduct;
   }
-  
-/*   async paginate(filter, options) {
-    const queryResult = await ProductsMongoose.paginate(filter, options);
-    return queryResult;
-  } */
 }
 
 export const productsModel = new ProductsModel();

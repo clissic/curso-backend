@@ -7,6 +7,8 @@ class ProductDTO {
     code,
     stock,
     category,
+    status,
+    owner
   ) {
     this.title = title;
     this.description = description;
@@ -15,6 +17,8 @@ class ProductDTO {
     this.code = code;
     this.stock = stock;
     this.category = category;
+    this.status = status;
+    this.owner = owner;
   }
 }
 

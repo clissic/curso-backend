@@ -13,9 +13,7 @@ class ProductsController {
         payload: allProducts,
       });
     } catch (error) {
-      logger.error(
-        "Error finding products in products.controller: " + error
-      );
+      logger.error("Error finding products in products.controller: " + error);
       return res.status(500).render("errorPage", {
         msg: "Error finding product.",
       });
@@ -24,16 +22,7 @@ class ProductsController {
 
   async create(req, res) {
     try {
-      if (!req.file) {
-        logger.error(
-          "Uploading a file is mandatory in products.controller"
-        );
-        return res.status(400).render("errorPage", {
-          msg: "Uploading a file is mandatory.",
-        });
-      }
-      const { title, description, price, code, stock, category } = req.body;
-      const thumbnail = req.file.filename;
+      const { thumbnail, title, price, description, code, category, stock, status, owner} = req.body;
       const productDTO = new ProductDTO(
         title,
         description,
@@ -41,16 +30,20 @@ class ProductsController {
         thumbnail,
         code,
         stock,
-        category
+        category,
+        status,
+        owner
       );
-      const newProduct = productsService.create(
+      const newProduct = await productsService.create(
         productDTO.title,
         productDTO.description,
         productDTO.price,
         productDTO.thumbnail,
         productDTO.code,
         productDTO.stock,
-        productDTO.category
+        productDTO.category,
+        productDTO.status,
+        productDTO.owner
       );
       return res.status(201).json({
         status: "success",
@@ -58,9 +51,7 @@ class ProductsController {
         payload: newProduct,
       });
     } catch (error) {
-      logger.error(
-        "Error creating product in products.controller: " + error
-      );
+      logger.error("Error creating product in products.controller: " + error);
       return res.status(500).render("errorPage", {
         msg: "Error creating product.",
       });
@@ -196,7 +187,8 @@ class ProductsController {
       }
     } catch (error) {
       logger.error(
-        "Error updating product by ID in products.controller (getByIdAndUpdate): " + error
+        "Error updating product by ID in products.controller (getByIdAndUpdate): " +
+          error
       );
       return res.status(404).render("errorPage", {
         msg: "Error updating product by ID.",
@@ -211,7 +203,11 @@ class ProductsController {
       if (deletedProduct) {
         return res
           .status(200)
-          .json({ status: "success", message: "Product deleted successfully", payload: [] });
+          .json({
+            status: "success",
+            message: "Product deleted successfully",
+            payload: [],
+          });
       } else {
         logger.error(
           "Product by ID not found in products.controller (getByIdAndDelete)"
@@ -222,7 +218,8 @@ class ProductsController {
       }
     } catch (error) {
       logger.error(
-        "Error deleting product by ID in products.controller (getByIdAndDelete): " + error
+        "Error deleting product by ID in products.controller (getByIdAndDelete): " +
+          error
       );
       return res.status(500).render("errorPage", {
         msg: "Error deleting product by ID.",
@@ -321,13 +318,25 @@ class ProductsController {
   }
 
   async renderRealTimeProd(req, res) {
+    let user = req.session.user;
+      if (!user) {
+        user = {
+          email: req.user ? req.user.email : req.session.email,
+          first_name: req.user ? req.user.first_name : req.session.first_name,
+          last_name: req.user ? req.user.last_name : req.session.last_name,
+          avatar: req.user ? req.user.avatar : req.session.avatar,
+          age: req.user ? req.user.age : req.session.age,
+          role: req.user ? req.user.role : req.session.role,
+          cartId: req.user ? req.user.cartId : req.session.cartId,
+        };
+      }
     try {
       const products = await productsService.getAll();
       const plainProducts = products.map((product) => product.toObject());
       const mainTitle = "REAL TIME PRODUCTS";
       return res
         .status(200)
-        .render("real-time-products", { mainTitle, products: plainProducts });
+        .render("real-time-products", { mainTitle, products: plainProducts, user });
     } catch (error) {
       logger.error("Failed to fetch products: " + error);
       return res

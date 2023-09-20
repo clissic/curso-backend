@@ -19,15 +19,16 @@ socket.on("productDeleted", async (deletedAndUpdatedProducts, productDeleted) =>
     return `
     <div class="realTimeProd">
       <div class="realTimeProdParams">
-        <p class="realTimeProdId">Id: ${prod._id}</p>
-        <p class="realTimeProdThumbnail">Thumbnail: <a target="_blank" href="${prod.thumbnail}">Product img</a></p>
-        <p class="realTimeProdTitle">Name: ${prod.title}</p>
-        <p class="realTimeProdPrice">Price: ${prod.price}</p>
-        <p class="realTimeProdDesc">Description: ${prod.description}</p>
-        <p class="realTimeProdCode">Code: ${prod.code}</p>
-        <p class="realTimeProdCategory">Category: ${prod.category}</p>
-        <p class="realTimeProdStock">Stock: ${prod.stock}</p>
-        <p class="realTimeProdStatus">Status: ${prod.status}</p>
+        <p class="realTimeProdProps">Id: ${prod._id}</p>
+        <p class="realTimeProdProps">Thumbnail: <a target="_blank" href="${prod.thumbnail}">Product img</a></p>
+        <p class="realTimeProdProps">Name: ${prod.title}</p>
+        <p class="realTimeProdProps">Price: ${prod.price}</p>
+        <p class="realTimeProdProps">Description: ${prod.description}</p>
+        <p class="realTimeProdProps">Code: ${prod.code}</p>
+        <p class="realTimeProdProps">Category: ${prod.category}</p>
+        <p class="realTimeProdProps">Stock: ${prod.stock}</p>
+        <p class="realTimeProdProps">Status: ${prod.status}</p>
+        <p class="realTimeProdProps">Owner: ${prod.owner}</p>
       </div>
       <button id="realTimeDeleteButton" data-id="${prod._id}" class="deleteButton">Delete</button>
     </div>
@@ -42,8 +43,7 @@ socket.on("productDeletionError", (errorMessage) => {
 });
 
 // AGREGAR UN PRODUCTO CON WEBSOCKETS
-getAddProductSubmitBtn.addEventListener("click", (event) => {
-  event.preventDefault();
+getAddProductSubmitBtn.addEventListener("click", () => {
 
   let thumbnail = document.getElementById("thumbnail").value;
   let title = document.getElementById("title").value;
@@ -52,6 +52,7 @@ getAddProductSubmitBtn.addEventListener("click", (event) => {
   let code = document.getElementById("code").value;
   let category = document.getElementById("category").value;
   let stock = document.getElementById("stock").value;
+  let owner = document.getElementById("owner").value
 
   let newProduct = {
     thumbnail,
@@ -61,36 +62,18 @@ getAddProductSubmitBtn.addEventListener("click", (event) => {
     code,
     category,
     stock,
-    status: true
+    status: true,
+    owner,
   };
 
-  socket.emit("addProduct", newProduct);
-});
-
-socket.on("productAdded", (createdAndUpdatedProducts, createdProduct) => {
-  console.log("Product added:", createdProduct);
-
-  document.getElementById("realTimeProds").innerHTML = createdAndUpdatedProducts.map((prod) => {
-    return `
-    <div class="realTimeProd">
-      <div class="realTimeProdParams">
-        <p class="realTimeProdId">Id: ${prod._id}</p>
-        <p class="realTimeProdThumbnail">Thumbnail: <a target="_blank" href="${prod.thumbnail}">Product img</a></p>
-        <p class="realTimeProdTitle">Name: ${prod.title}</p>
-        <p class="realTimeProdPrice">Price: ${prod.price}</p>
-        <p class="realTimeProdDesc">Description: ${prod.description}</p>
-        <p class="realTimeProdCode">Code: ${prod.code}</p>
-        <p class="realTimeProdCategory">Category: ${prod.category}</p>
-        <p class="realTimeProdStock">Stock: ${prod.stock}</p>
-        <p class="realTimeProdStatus">Status: ${prod.status}</p>
-      </div>
-      <button id="realTimeDeleteButton" data-id="${prod._id}" class="deleteButton">Delete</button>
-    </div>
-    `
-  }).join("")
-});
-
-socket.on("productCreationError", async (errorMessage) => {
-  Swal.fire({title: "Error creating product:", text: errorMessage})
-  console.log("Error creating product:", errorMessage);
+  fetch(`http://127.0.0.1:8080/api/products`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newProduct)
+  })
+    .then((response) => response.json())
+    .then(data => data)
+    .catch(error => console.log("Error: " + error))
 });

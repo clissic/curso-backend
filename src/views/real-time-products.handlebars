@@ -4,15 +4,16 @@
     {{#with this}}
       <div class="realTimeProd">
         <div class="realTimeProdParams">
-          <p class="realTimeProdId">Id: {{_id}}</p>
-          <p class="realTimeProdThumbnail">Thumbnail: <a target="_blank" href="{{thumbnail}}">Product img</a></p>
-          <p class="realTimeProdTitle">Name: {{title}}</p>
-          <p class="realTimeProdPrice">Price: {{price}}</p>
-          <p class="realTimeProdDesc">Description: {{description}}</p>
-          <p class="realTimeProdCode">Code: {{code}}</p>
-          <p class="realTimeProdCategory">Category: {{category}}</p>
-          <p class="realTimeProdStock">Stock: {{stock}}</p>
-          <p class="realTimeProdStatus">Status: {{status}}</p>
+          <p class="realTimeProdProps">Id: {{_id}}</p>
+          <p class="realTimeProdProps">Thumbnail: <a target="_blank" href="{{thumbnail}}">Product img</a></p>
+          <p class="realTimeProdProps">Name: {{title}}</p>
+          <p class="realTimeProdProps">Price: {{price}}</p>
+          <p class="realTimeProdProps">Description: {{description}}</p>
+          <p class="realTimeProdProps">Code: {{code}}</p>
+          <p class="realTimeProdProps">Category: {{category}}</p>
+          <p class="realTimeProdProps">Stock: {{stock}}</p>
+          <p class="realTimeProdProps">Status: {{status}}</p>
+          <p class="realTimeProdProps">Owner: {{owner}}</p>
         </div>
         <button id="realTimeDeleteButton" data-id="{{_id}}" class="deleteButton">Delete</button>
       </div>
@@ -50,6 +51,7 @@
     <label for="stock">Stock:</label>
     <input type="number" id="stock" name="stock" required />
   </div>
+  <input type="hidden" id="owner" value={{user.email}}>
   <input type="submit" value="Submit" id="addProductSubmitBtn"/>
 </form>
 <script src="/socket.io/socket.io.js"></script>

@@ -51,6 +51,17 @@ class CartsService {
       throw new Error("Failed to get all products from cart");
     }
   }
+
+  async getByIdAndDelete(cid) {
+    const models = await importModels();
+    const cartsModel = models.carts
+    try {
+      const deletedCart = await cartsModel.getByIdAndDelete(cid)
+      return deletedCart;
+    } catch (error) {
+      throw new Error("Failed to delete cart by ID");
+    }
+  }
 }
 
 export const cartsService = new CartsService();

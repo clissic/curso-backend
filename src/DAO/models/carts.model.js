@@ -32,6 +32,11 @@ export default class CartsModel {
         }
         return [];
     }
+
+    async getByIdAndDelete(cid) {
+        const deletedCart = await CartsMongoose.findOneAndDelete(cid);
+        return deletedCart;
+    }
 }
 
 export const cartsModel = new CartsModel();

@@ -201,15 +201,7 @@
   overflow-x: auto;
 }
 
-.realTimeProdId,
-.realTimeProdThumbnail,
-.realTimeProdTitle,
-.realTimeProdPrice,
-.realTimeProdDesc,
-.realTimeProdCode,
-.realTimeProdCategory,
-.realTimeProdStock,
-.realTimeProdStatus {
+.realTimeProdProps {
   margin: 0;
   padding: 5px;
   font-size: 14px;

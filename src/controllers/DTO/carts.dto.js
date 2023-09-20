@@ -1,5 +1,7 @@
 class CartDTO {
-  constructor(products = []) {
+  constructor(
+    products = []
+  ) {
     this.products = products;
   }
 }

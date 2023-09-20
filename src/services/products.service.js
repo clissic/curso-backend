@@ -5,7 +5,7 @@ const models = await importModels();
 const productsModel = models.products
 
 class ProductsService {
-  async create(title, description, price, thumbnail, code, stock, category) {
+  async create(title, description, price, thumbnail, code, stock, category, status, owner) {
     try {
       return await productsModel.create(
         title,
@@ -14,7 +14,9 @@ class ProductsService {
         thumbnail,
         code,
         stock,
-        category
+        category,
+        status,
+        owner
       );
     } catch (error) {
       throw logger.info("Failed to create product: " + error);
@@ -72,16 +74,6 @@ class ProductsService {
       throw new Error(`Failed to decrease stock: ${error.message}`);
     }
   }
-
-/*   async paginate(filter, options) {
-    try {
-      const queryResult = await productsModel.paginate(filter, options);
-      console.log(queryResult)
-      return queryResult
-    } catch (error) {
-      throw new Error("Failed to paginate products");
-    }
-  } */
 }
 
 export const productsService = new ProductsService();

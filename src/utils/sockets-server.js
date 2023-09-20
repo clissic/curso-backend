@@ -42,27 +42,6 @@ export function connectSocketServer(httpServer) {
       }
     });
 
-    // AGREGAR PRODUCTO
-    socket.on("addProduct", async (newProduct) => {
-      try {
-        logger.info(JSON.stringify(newProduct));
-        const createdProduct = await productsService.create(
-          newProduct.title,
-          newProduct.description,
-          newProduct.price,
-          newProduct.thumbnail,
-          newProduct.code,
-          newProduct.stock,
-          newProduct.category
-        );
-        const createdAndUpdatedProducts = await productsService.getAll();
-        socket.emit("productAdded", createdAndUpdatedProducts, createdProduct);
-      } catch (error) {
-        logger.info(error);
-        socket.emit("productCreationError", error.message);
-      }
-    });
-
     // AGREGAR PRODUCTO AL CARRITO
     socket.on("productIdToBeAdded", async (id) => {
       try {
