@@ -10,7 +10,6 @@ paths:
           content:
             aplication/json:
               schema:
-                type: array
                 items:
                   $ref: "#components/schemas/Success"
         "500":
@@ -195,22 +194,32 @@ components:
       type: object
       properties:
         status:
-          type: String
+          type: string
           description: Success confirmation
         message:
-          type: String
+          type: string
           description: Description of what happened
         payload:
-          type: Array
-          description: Server response
+          type: object
+          properties:
+            _id:
+              type: string
+              description: Cart ID
+            products:
+              type: array
+              items:
+                type: string
+              description: List of products in the cart
+            __v:
+              type: integer
+              description: Version number
       example:
         status: success
         message: Succes message depending on endpoint
-        payload: [ 
-          _id: ObjectId("64cd9909a5243f46e9b096d1"),
-          products: [],
+        payload:
+          _id: "650cc5ac149f4e99644ed141"
+          products: []
           __v: 0
-          ]
     TicketSuccess:
       type: object
       properties:

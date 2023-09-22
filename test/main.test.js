@@ -68,7 +68,7 @@ describe("Starting SUPERTEST API process:", function () {
   });
 
   // ENDPOINT CARTS
-  describe("Endpoint carts", () => {
+  describe("Endpoint CARTS:", () => {
     it("POST: CREATE CART", async () => {
       const response = await requester.post("/api/carts");
       const { status, ok, _body } = response;
@@ -117,5 +117,5 @@ describe("Starting SUPERTEST API process:", function () {
   });
 
   // ENDPOINT SESSIONS
-  describe("Endpoint sessions", () => {});
+  describe("Endpoint SESSIONS:", () => {});
 });

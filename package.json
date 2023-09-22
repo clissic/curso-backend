@@ -8,7 +8,7 @@
     "node": "16.x"
   },
   "scripts": {
-    "test": "mocha test/supertest.test.js",
+    "test": "mocha test/main.test.js",
     "start": "node ./src/app.js --mode PRODUCTION",
     "dev": "nodemon -e yaml,js ./src/app.js --mode DEVELOPMENT"
   },
