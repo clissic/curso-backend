@@ -9,8 +9,8 @@ export default class UsersModel {
       {},
       {
         _id: true,
-        firstName: true,
-        lastName: true,
+        first_name: true,
+        last_name: true,
         email: true,
         avatar: true,
       }

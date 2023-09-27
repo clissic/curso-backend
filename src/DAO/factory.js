@@ -54,7 +54,7 @@ async function importModels() {
 
     default:
       throw new Error(
-        `El tipo de persistencia "${config.persistence}" no es válido.`
+        `El tipo de persistencia "${env.persistence}" no es válido.`
       );
   }
 

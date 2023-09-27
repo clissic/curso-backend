@@ -3,13 +3,14 @@ import env from "../config/env.config.js";
 import { logger } from "./logger.js";
 
 const MONGO_PASSWORD = env.mongoPassword
+const dbName = "test"
 
 export default class MongoSingleton {
   static instance;
 
   constructor() {
     mongoose.connect(
-      `mongodb+srv://joaquinperezcoria:${MONGO_PASSWORD}@cluster0.zye6fyd.mongodb.net/?retryWrites=true&w=majority`,
+      `mongodb+srv://joaquinperezcoria:${MONGO_PASSWORD}@cluster0.zye6fyd.mongodb.net/${dbName}?retryWrites=true&w=majority`,
     );
   }
 
