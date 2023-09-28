@@ -1,5 +1,7 @@
 import chai from "chai";
 import supertest from "supertest";
+import { faker } from '@faker-js/faker';
+import { isValidPassword } from "../src/utils/Bcrypt.js";
 
 // CHAI CONFIG
 const expect = chai.expect;
@@ -117,5 +119,22 @@ describe("Starting SUPERTEST API process:", function () {
   });
 
   // ENDPOINT SESSIONS
-  describe("Endpoint SESSIONS:", () => {});
+  describe("Endpoint SESSIONS:", () => {
+    let cookieName;
+    let cookieValue;
+    let mockUserId;
+    const mockUser = {
+      first_name: "Tester",
+      last_name: "Walker",
+      email: faker.internet.email(),
+      age: 18,
+      password: "123",
+    }
+
+    it("POST: SIGN UP", async () => {
+      const {_body} = await requester.post("/api/users").send(mockUser);
+      mockUserId = _body.payload._id
+      expect(_body.payload).to.be.ok;
+    })
+  });
 });
