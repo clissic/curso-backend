@@ -86,6 +86,14 @@ class UserService {
       throw new Error("Failed to update password");
     }
   }
+
+  async deleteInactiveUsers() {
+    try {
+      return await usersModel.deleteInactiveUsers();
+    } catch(error) {
+      throw new Error("Failed to delete inactive users");
+    }
+  }
 }
 
 export const userService = new UserService();

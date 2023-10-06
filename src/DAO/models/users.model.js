@@ -1,7 +1,8 @@
-import { cartsService } from "../../services/carts.service.js";
-import { isValidPassword } from "../../utils/Bcrypt.js";
-import { logger } from "../../utils/logger.js";
-import { UserMongoose } from "../models/mongoose/users.mongoose.js";
+import { cartsService } from '../../services/carts.service.js';
+import { isValidPassword } from '../../utils/Bcrypt.js';
+import { logger } from '../../utils/logger.js';
+import { UserMongoose } from '../models/mongoose/users.mongoose.js';
+import moment from 'moment';
 
 export default class UsersModel {
   async getAll() {
@@ -13,6 +14,7 @@ export default class UsersModel {
         last_name: true,
         email: true,
         avatar: true,
+        role: true,
       }
     );
     return users;
@@ -39,6 +41,8 @@ export default class UsersModel {
       }
     );
     if (user && isValidPassword(password, user.password)) {
+      user.last_login = new Date();
+      await user.save();
       return user;
     } else {
       return false;
@@ -58,8 +62,13 @@ export default class UsersModel {
         password: true,
         role: true,
         cartId: true,
+        last_login: true,
       }
     );
+    if (user) {
+      user.last_login = new Date();
+      await user.save();
+    }
     return user;
   }
 
@@ -77,17 +86,7 @@ export default class UsersModel {
     return userCreated;
   }
 
-  async updateOne({
-    _id,
-    first_name,
-    last_name,
-    email,
-    avatar,
-    age,
-    password,
-    role,
-    cartId,
-  }) {
+  async updateOne({ _id, first_name, last_name, email, avatar, age, password, role, cartId }) {
     const userUpdated = await UserMongoose.updateOne(
       {
         _id: _id,
@@ -108,6 +107,14 @@ export default class UsersModel {
 
   async deleteOne(_id) {
     const result = await UserMongoose.deleteOne({ _id: _id });
+    return result;
+  }
+
+  async deleteInactiveUsers() {
+    const twoDaysAgo = moment().subtract(2, 'days').toDate();
+    const result = await UserMongoose.deleteMany({
+      last_login: { $lt: twoDaysAgo },
+    });
     return result;
   }
 

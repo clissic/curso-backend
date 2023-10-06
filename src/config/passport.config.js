@@ -46,7 +46,7 @@ export function iniPassport() {
       async (req, username, password, done) => {
         try {
           const { first_name, last_name, email, age } = req.body;
-          let user = await UserMongoose.findOne({ email: username });
+          let user = await userService.findByEmail({ email: username });
           if (user) {
             logger.info("User already exists");
             return done(null, false);
@@ -83,7 +83,6 @@ export function iniPassport() {
         callbackURL: "http://localhost:8080/api/sessions/githubcallback",
       },
       async (accesToken, _, profile, done) => {
-        logger.info(JSON.stringify(profile));
         try {
           const res = await fetch("https://api.github.com/user/emails", {
             headers: {
@@ -100,14 +99,14 @@ export function iniPassport() {
             return done(new Error("cannot get a valid email for this user"));
           }
           profile.email = emailDetail.email;
-
-          let user = await UserMongoose.findOne({ email: profile.email });
+          const email = profile.email;
+          let user = await userService.findByEmail(email);
           if (!user) {
             const newUser = {
               first_name: profile._json.name || profile._json.login || "noname",
               last_name: "noLast",
               email: profile.email,
-              avatar: "https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg",
+              avatar: profile._json.avatar_url,
               age: 0,
               password: "noPass",
               role: "user",

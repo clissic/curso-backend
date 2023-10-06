@@ -11,4 +11,6 @@ usersRouter.post("/", usersController.create);
 
 usersRouter.put("/:_id", usersController.updateOne);
 
+usersRouter.delete("/d/deleteinactiveusers", usersController.deleteInactiveUsers);
+
 usersRouter.delete("/:_id", usersController.deleteOne);

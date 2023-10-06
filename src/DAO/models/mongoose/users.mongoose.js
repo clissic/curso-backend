@@ -9,6 +9,7 @@ const schema = new Schema({
   password: { type: String, required: true, max: 100 },
   role: { type: String, default: "user"},
   cartId: { type: Object },
+  last_login: { type: Date, default: Date.now }
 });
 
 export const UserMongoose = model("users", schema);
