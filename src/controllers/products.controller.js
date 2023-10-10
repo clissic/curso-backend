@@ -1,39 +1,29 @@
-import { ProductsMongoose } from "../DAO/models/mongoose/products.mongoose.js";
-import { productsService } from "../services/products.service.js";
-import { logger } from "../utils/logger.js";
-import ProductDTO from "./DTO/products.dto.js";
+import { ProductsMongoose } from '../DAO/models/mongoose/products.mongoose.js';
+import { productsService } from '../services/products.service.js';
+import { logger } from '../utils/logger.js';
+import ProductDTO from './DTO/products.dto.js';
 
 class ProductsController {
   async getAll(req, res) {
     try {
       const allProducts = await productsService.getAll();
       return res.status(200).json({
-        status: "success",
-        message: "Products found",
+        status: 'success',
+        message: 'Products found',
         payload: allProducts,
       });
     } catch (error) {
-      logger.error("Error finding products in products.controller: " + error);
-      return res.status(500).render("errorPage", {
-        msg: "Error finding product.",
+      logger.error('Error finding products in products.controller: ' + error);
+      return res.status(500).render('errorPage', {
+        msg: 'Error finding product.',
       });
     }
   }
 
   async create(req, res) {
     try {
-      const { thumbnail, title, price, description, code, category, stock, status, owner} = req.body;
-      const productDTO = new ProductDTO(
-        title,
-        description,
-        price,
-        thumbnail,
-        code,
-        stock,
-        category,
-        status,
-        owner
-      );
+      const { thumbnail, title, price, description, code, category, stock, status, owner } = req.body;
+      const productDTO = new ProductDTO(title, description, price, thumbnail, code, stock, category, status, owner);
       const newProduct = await productsService.create(
         productDTO.title,
         productDTO.description,
@@ -46,14 +36,14 @@ class ProductsController {
         productDTO.owner
       );
       return res.status(201).json({
-        status: "success",
-        message: "Product created",
+        status: 'success',
+        message: 'Product created',
         payload: newProduct,
       });
     } catch (error) {
-      logger.error("Error creating product in products.controller: " + error);
-      return res.status(500).render("errorPage", {
-        msg: "Error creating product.",
+      logger.error('Error creating product in products.controller: ' + error);
+      return res.status(500).render('errorPage', {
+        msg: 'Error creating product.',
       });
     }
   }
@@ -61,13 +51,12 @@ class ProductsController {
   async getAllAndPaginate(req, res) {
     try {
       const { currentPage, prodLimit, sort, query } = req.query;
-      const sortOption =
-        sort === "asc" ? { price: 1 } : sort === "desc" ? { price: -1 } : {};
+      const sortOption = sort === 'asc' ? { price: 1 } : sort === 'desc' ? { price: -1 } : {};
       const filter = {};
-      if (query === "tablet" || query === "celphone" || query === "notebook") {
+      if (query === 'tablet' || query === 'celphone' || query === 'notebook') {
         filter.category = query;
       }
-      if (query === "available") {
+      if (query === 'available') {
         filter.stock = { $gt: 0 };
       }
 
@@ -77,17 +66,7 @@ class ProductsController {
         page: currentPage || 1,
       });
       let paginatedProd = queryResult.docs;
-      const {
-        totalDocs,
-        limit,
-        totalPages,
-        page,
-        pagingCounter,
-        hasPrevPage,
-        hasNextPage,
-        prevPage,
-        nextPage,
-      } = queryResult;
+      const { totalDocs, limit, totalPages, page, pagingCounter, hasPrevPage, hasNextPage, prevPage, nextPage } = queryResult;
       paginatedProd = paginatedProd.map((prod) => ({
         _id: prod._id.toString(),
         title: prod.title,
@@ -98,19 +77,11 @@ class ProductsController {
         stock: prod.stock,
         category: prod.category,
       }));
-      const prevLink = hasPrevPage
-        ? `/api/products?currentPage=${queryResult.prevPage}&prodLimit=${
-            prodLimit ? prodLimit : ""
-          }&sort=${sort ? sort : ""}&query=${query ? query : ""}`
-        : null;
-      const nextLink = hasNextPage
-        ? `/api/products?currentPage=${queryResult.nextPage}&prodLimit=${
-            prodLimit ? prodLimit : ""
-          }&sort=${sort ? sort : ""}&query=${query ? query : ""}`
-        : null;
+      const prevLink = hasPrevPage ? `/api/products?currentPage=${queryResult.prevPage}&prodLimit=${prodLimit ? prodLimit : ''}&sort=${sort ? sort : ''}&query=${query ? query : ''}` : null;
+      const nextLink = hasNextPage ? `/api/products?currentPage=${queryResult.nextPage}&prodLimit=${prodLimit ? prodLimit : ''}&sort=${sort ? sort : ''}&query=${query ? query : ''}` : null;
       return res.status(200).json({
-        status: "success",
-        msg: "Products list",
+        status: 'success',
+        msg: 'Products list',
         payload: {
           paginatedProd,
           totalDocs,
@@ -126,11 +97,9 @@ class ProductsController {
         },
       });
     } catch (error) {
-      logger.error(
-        "Error getting products and pagination in products.controller: " + error
-      );
-      return res.status(500).render("errorPage", {
-        msg: "Error getting products and pagination.",
+      logger.error('Error getting products and pagination in products.controller: ' + error);
+      return res.status(500).render('errorPage', {
+        msg: 'Error getting products and pagination.',
       });
     }
   }
@@ -141,24 +110,20 @@ class ProductsController {
       const product = await productsService.getById(id);
       if (product) {
         return res.status(200).json({
-          status: "success",
-          message: "Product by ID found",
+          status: 'success',
+          message: 'Product by ID found',
           payload: product,
         });
       } else {
-        logger.error(
-          "Product by ID not found in products.controller (getById)"
-        );
-        return res.status(404).render("errorPage", {
-          msg: "Product by ID not found.",
+        logger.error('Product by ID not found in products.controller (getById)');
+        return res.status(404).render('errorPage', {
+          msg: 'Product by ID not found.',
         });
       }
     } catch (error) {
-      logger.error(
-        "Error getting product by id in products.controller: " + error
-      );
-      return res.status(500).render("errorPage", {
-        msg: "Error getting product by id.",
+      logger.error('Error getting product by id in products.controller: ' + error);
+      return res.status(500).render('errorPage', {
+        msg: 'Error getting product by id.',
       });
     }
   }
@@ -167,31 +132,23 @@ class ProductsController {
     try {
       const { id } = req.params;
       const dataToUpdate = req.body;
-      const updatedProduct = await productsService.getByIdAndUpdate(
-        id,
-        dataToUpdate
-      );
+      const updatedProduct = await productsService.getByIdAndUpdate(id, dataToUpdate);
       if (updatedProduct) {
         return res.status(200).json({
-          status: "success",
-          message: "Product modified successfully",
+          status: 'success',
+          message: 'Product modified successfully',
           payload: updatedProduct,
         });
       } else {
-        logger.error(
-          "Product by ID not found in products.controller (getByIdAndUpdate)"
-        );
-        return res.status(404).render("errorPage", {
-          msg: "Product by ID not found.",
+        logger.error('Product by ID not found in products.controller (getByIdAndUpdate)');
+        return res.status(404).render('errorPage', {
+          msg: 'Product by ID not found.',
         });
       }
     } catch (error) {
-      logger.error(
-        "Error updating product by ID in products.controller (getByIdAndUpdate): " +
-          error
-      );
-      return res.status(404).render("errorPage", {
-        msg: "Error updating product by ID.",
+      logger.error('Error updating product by ID in products.controller (getByIdAndUpdate): ' + error);
+      return res.status(404).render('errorPage', {
+        msg: 'Error updating product by ID.',
       });
     }
   }
@@ -201,28 +158,21 @@ class ProductsController {
       const { id } = req.params;
       const deletedProduct = await productsService.getByIdAndDelete(id);
       if (deletedProduct) {
-        return res
-          .status(200)
-          .json({
-            status: "success",
-            message: "Product deleted successfully",
-            payload: [],
-          });
+        return res.status(200).json({
+          status: 'success',
+          message: 'Product deleted successfully',
+          payload: [],
+        });
       } else {
-        logger.error(
-          "Product by ID not found in products.controller (getByIdAndDelete)"
-        );
-        return res.status(404).render("errorPage", {
-          msg: "Product by ID not found.",
+        logger.error('Product by ID not found in products.controller (getByIdAndDelete)');
+        return res.status(404).render('errorPage', {
+          msg: 'Product by ID not found.',
         });
       }
     } catch (error) {
-      logger.error(
-        "Error deleting product by ID in products.controller (getByIdAndDelete): " +
-          error
-      );
-      return res.status(500).render("errorPage", {
-        msg: "Error deleting product by ID.",
+      logger.error('Error deleting product by ID in products.controller (getByIdAndDelete): ' + error);
+      return res.status(500).render('errorPage', {
+        msg: 'Error deleting product by ID.',
       });
     }
   }
@@ -241,14 +191,21 @@ class ProductsController {
           cartId: req.user ? req.user.cartId : req.session.cartId,
         };
       }
+      
+      let dashboard;
+      if (user.role == 'admin') {
+        dashboard = true;
+      } else {
+        dashboard = false;
+      }
+
       const { currentPage, prodLimit, sort, query } = req.query;
-      const sortOption =
-        sort === "asc" ? { price: 1 } : sort === "desc" ? { price: -1 } : {};
+      const sortOption = sort === 'asc' ? { price: 1 } : sort === 'desc' ? { price: -1 } : {};
       const filter = {};
-      if (query === "tablet" || query === "celphone" || query === "notebook") {
+      if (query === 'tablet' || query === 'celphone' || query === 'notebook') {
         filter.category = query;
       }
-      if (query === "available") {
+      if (query === 'available') {
         filter.stock = { $gt: 0 };
       }
       const queryResult = await ProductsMongoose.paginate(filter, {
@@ -257,17 +214,7 @@ class ProductsController {
         page: currentPage || 1,
       });
       let paginatedProd = queryResult.docs;
-      const {
-        totalDocs,
-        limit,
-        totalPages,
-        page,
-        pagingCounter,
-        hasPrevPage,
-        hasNextPage,
-        prevPage,
-        nextPage,
-      } = queryResult;
+      const { totalDocs, limit, totalPages, page, pagingCounter, hasPrevPage, hasNextPage, prevPage, nextPage } = queryResult;
       paginatedProd = paginatedProd.map((prod) => ({
         _id: prod._id.toString(),
         title: prod.title,
@@ -278,19 +225,11 @@ class ProductsController {
         stock: prod.stock,
         category: prod.category,
       }));
-      const prevLink = hasPrevPage
-        ? `/api/products?currentPage=${queryResult.prevPage}&prodLimit=${
-            prodLimit ? prodLimit : ""
-          }&sort=${sort ? sort : ""}&query=${query ? query : ""}`
-        : null;
-      const nextLink = hasNextPage
-        ? `/api/products?currentPage=${queryResult.nextPage}&prodLimit=${
-            prodLimit ? prodLimit : ""
-          }&sort=${sort ? sort : ""}&query=${query ? query : ""}`
-        : null;
+      const prevLink = hasPrevPage ? `/api/products?currentPage=${queryResult.prevPage}&prodLimit=${prodLimit ? prodLimit : ''}&sort=${sort ? sort : ''}&query=${query ? query : ''}` : null;
+      const nextLink = hasNextPage ? `/api/products?currentPage=${queryResult.nextPage}&prodLimit=${prodLimit ? prodLimit : ''}&sort=${sort ? sort : ''}&query=${query ? query : ''}` : null;
 
-      const mainTitle = "ALL PRODUCTS";
-      return res.status(200).render("products", {
+      const mainTitle = 'ALL PRODUCTS';
+      return res.status(200).render('products', {
         user,
         query,
         sort,
@@ -308,40 +247,35 @@ class ProductsController {
         nextPage,
         prevLink,
         nextLink,
+        dashboard
       });
     } catch (error) {
-      logger.error("Failed to fetch products: " + error);
-      return res
-        .status(500)
-        .render("errorPage", { msg: "Error 500. Failed to fetch products." });
+      logger.error('Failed to fetch products: ' + error);
+      return res.status(500).render('errorPage', { msg: 'Error 500. Failed to fetch products.' });
     }
   }
 
   async renderRealTimeProd(req, res) {
     let user = req.session.user;
-      if (!user) {
-        user = {
-          email: req.user ? req.user.email : req.session.email,
-          first_name: req.user ? req.user.first_name : req.session.first_name,
-          last_name: req.user ? req.user.last_name : req.session.last_name,
-          avatar: req.user ? req.user.avatar : req.session.avatar,
-          age: req.user ? req.user.age : req.session.age,
-          role: req.user ? req.user.role : req.session.role,
-          cartId: req.user ? req.user.cartId : req.session.cartId,
-        };
-      }
+    if (!user) {
+      user = {
+        email: req.user ? req.user.email : req.session.email,
+        first_name: req.user ? req.user.first_name : req.session.first_name,
+        last_name: req.user ? req.user.last_name : req.session.last_name,
+        avatar: req.user ? req.user.avatar : req.session.avatar,
+        age: req.user ? req.user.age : req.session.age,
+        role: req.user ? req.user.role : req.session.role,
+        cartId: req.user ? req.user.cartId : req.session.cartId,
+      };
+    }
     try {
       const products = await productsService.getAll();
       const plainProducts = products.map((product) => product.toObject());
-      const mainTitle = "REAL TIME PRODUCTS";
-      return res
-        .status(200)
-        .render("real-time-products", { mainTitle, products: plainProducts, user });
+      const mainTitle = 'REAL TIME PRODUCTS';
+      return res.status(200).render('real-time-products', { mainTitle, products: plainProducts, user });
     } catch (error) {
-      logger.error("Failed to fetch products: " + error);
-      return res
-        .status(500)
-        .render("errorPage", { msg: "Error 500. Failed to fetch products." });
+      logger.error('Failed to fetch products: ' + error);
+      return res.status(500).render('errorPage', { msg: 'Error 500. Failed to fetch products.' });
     }
   }
 }

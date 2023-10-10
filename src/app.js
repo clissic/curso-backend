@@ -26,6 +26,7 @@ import { logger } from './utils/logger.js';
 import { connectSocketServer } from './utils/sockets-server.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
+import { userRouter } from './routes/user.html.routes.js';
 
 const app = express();
 const PORT = env.port;
@@ -92,6 +93,7 @@ app.use('/api/sessions', sessionsRouter);
 
 // PLANTILLAS
 app.use('/', loginRouter);
+app.use('/user', userRouter);
 app.use('/signup', signupRouter);
 app.use('/products', products);
 app.use('/chat', chatRouter);
