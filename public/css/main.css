@@ -543,7 +543,7 @@ input[type="submit"]:hover {
   display: flex;
   flex-direction: row;
   column-gap: 5vw;
-  padding: 10vh 15vw 10vh 15vw;
+  padding: 10vh 9vw 10vh 9vw;
 }
 
 #userData {
@@ -583,4 +583,11 @@ input[type="submit"]:hover {
 
 .dashBtn:active {
   background-color: #919191;
+}
+
+#btnPnlCols {
+  margin-top: 5vh;
+  display: flex;
+  flex-direction: row;
+  column-gap: 4vw;
 }

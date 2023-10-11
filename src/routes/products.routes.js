@@ -6,7 +6,7 @@ import { checkAdminOrPremium } from "../middlewares/auth.js";
 
 export const productsRouter = express.Router();
 
-productsRouter.get("/", productsController.getAllAndPaginate);
+productsRouter.get("/", checkAdminOrPremium, productsController.getAllAndPaginate);
 
 productsRouter.get("/:id", productsController.getById);
 

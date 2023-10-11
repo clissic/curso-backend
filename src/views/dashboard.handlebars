@@ -1,5 +1,6 @@
 <div id="dashboard">
     <div class="userData">
+        <h1>iCommerce</h1>
       <div id="userNameContainer">
       <p><strong>Welcome: </strong>{{user.first_name}}</p>
       <img id="userAvatar" src="{{user.avatar}}" alt="user avatar">
@@ -28,17 +29,67 @@
         </div>
         <div id="buttonPanel">
             <h2>ADMIN DASHBOARD:</h2>
-            <div class="divDashBtn">
-                <p>Delete inactive users:</p>
-                <a href="#" class="dashBtn">💣 <strong>DELETE USERS</strong> 💥</a>
-            </div>
-            <div class="divDashBtn">
-                <p>Toggle role to premium / user:</p>
-                <a href="#" class="dashBtn">🥇 <strong>TOGGLE ROLES</strong> 👤</a>
-            </div>
-            <div class="divDashBtn">
-                <p>Get all users:</p>
-                <a href="#" class="dashBtn">👨‍💻 <strong> GENERATE JSON</strong> 📋</a>
+            <div id="btnPnlCols">
+                <div class="btnPnlCol">
+                    <h3>👥 USERS MANAGEMENT:</h3>
+                    <div class="divDashBtn">
+                        <p>Delete inactive users:</p>
+                        <a href="#" class="dashBtn" target="_blank">💣 <strong>DELETE USERS</strong> 💥</a>
+                    </div>
+                    <div class="divDashBtn">
+                        <p>Create user:</p>
+                        <a href="/signup" class="dashBtn" target="_blank">👤 <strong>CREATE USER</strong> ✔️</a>
+                    </div>
+                    <div class="divDashBtn">
+                        <p>Toggle role to premium / user:</p>
+                        <input type="text" placeholder="User's email">
+                        <a href="#" class="dashBtn" target="_blank">👤 <strong>TOGGLE ROLES</strong> 🥇</a>
+                    </div>
+                </div>
+                <div class="btnPnlCol">
+                    <h3>🛍️ PRODUCTS MANAGEMENT:</h3>
+                    <div class="divDashBtn">
+                        <p>Manage all products:</p>
+                        <a href="/realtimeproducts#manageProd" class="dashBtn" target="_blank">📦 <strong>ALL PRODUCTS</strong> 🛍️</a>
+                    </div>
+                    <div class="divDashBtn">
+                        <p>Create a product:</p>
+                        <a href="/realtimeproducts#createProd" class="dashBtn" target="_blank">📦 <strong>ADD PRODUCT</strong> ✔️</a>
+                    </div>
+                    <div class="divDashBtn">
+                        <p>Modify stock:</p>
+                        <input type="text" placeholder="User's ID">
+                        <input type="number" placeholder="New stock amount">
+                        <a href="#" class="dashBtn" target="_blank">🛍️ <strong>SET NEW STOCK</strong> 🧾</a>
+                    </div>
+                    <div class="divDashBtn">
+                        <p>Modify price:</p>
+                        <input type="text" placeholder="User's ID">
+                        <input type="number" placeholder="New price amount">
+                        <a href="#" class="dashBtn" target="_blank">🛍️ <strong>SET NEW PRICE</strong> 💰</a>
+                    </div>
+                </div>
+                <div class="btnPnlCol">
+                    <h3>👨‍💻 JSON GENERATORS:</h3>
+                    <div class="divDashBtn">
+                        <p>Get all users:</p>
+                        <a href="/api/users" class="dashBtn" target="_blank">👥 <strong> GENERATE JSON</strong> 📋</a>
+                    </div>
+                    <div class="divDashBtn">
+                        <p>Get user by ID:</p>
+                        <input type="text" placeholder="User's ID">
+                        <a href="#" class="dashBtn" target="_blank">👤 <strong> GENERATE JSON</strong> 📋</a>
+                    </div>
+                    <div class="divDashBtn">
+                        <p>Get all products with pagination:</p>
+                        <a href="/api/products" class="dashBtn" target="_blank">🛍️ <strong> GENERATE JSON</strong> 📋</a>
+                    </div>
+                    <div class="divDashBtn">
+                        <p>Get product by ID:</p>
+                        <input type="text" placeholder="Product's ID">
+                        <a href="#" class="dashBtn" target="_blank">📦 <strong> GENERATE JSON</strong> 📋</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
