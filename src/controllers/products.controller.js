@@ -268,14 +268,47 @@ class ProductsController {
         cartId: req.user ? req.user.cartId : req.session.cartId,
       };
     }
+    let dashboard;
+    if (user.role == 'admin') {
+      dashboard = true;
+    } else {
+      dashboard = false;
+    }
     try {
       const products = await productsService.getAll();
       const plainProducts = products.map((product) => product.toObject());
       const mainTitle = 'REAL TIME PRODUCTS';
-      return res.status(200).render('real-time-products', { mainTitle, products: plainProducts, user });
+      return res.status(200).render('real-time-products', { mainTitle, products: plainProducts, user, dashboard });
     } catch (error) {
       logger.error('Failed to fetch products: ' + error);
       return res.status(500).render('errorPage', { msg: 'Error 500. Failed to fetch products.' });
+    }
+  }
+
+  async renderCreateProduct(req, res) {
+    let user = req.session.user;
+    if (!user) {
+      user = {
+        email: req.user ? req.user.email : req.session.email,
+        first_name: req.user ? req.user.first_name : req.session.first_name,
+        last_name: req.user ? req.user.last_name : req.session.last_name,
+        avatar: req.user ? req.user.avatar : req.session.avatar,
+        age: req.user ? req.user.age : req.session.age,
+        role: req.user ? req.user.role : req.session.role,
+        cartId: req.user ? req.user.cartId : req.session.cartId,
+      };
+    }
+    let dashboard;
+    if (user.role == 'admin') {
+      dashboard = true;
+    } else {
+      dashboard = false;
+    }
+    try {
+      return res.status(200).render("create-product", { user, dashboard })
+    } catch (e) {
+      logger.error('Failed to render create product page: ' + error);
+      return res.status(500).render('errorPage', { msg: 'Error 500. Failed to render create product page.' });
     }
   }
 }

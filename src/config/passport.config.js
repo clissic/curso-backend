@@ -46,7 +46,9 @@ export function iniPassport() {
       async (req, username, password, done) => {
         try {
           const { first_name, last_name, email, age } = req.body;
-          let user = await userService.findByEmail({ email: username });
+
+          let user = await userService.findByEmail(username);
+
           if (user) {
             logger.info("User already exists");
             return done(null, false);
@@ -58,16 +60,15 @@ export function iniPassport() {
             email,
             age,
             password: createHash(password),
-            role: "user",
             cartId: await cartsService.create(),
           };
+          logger.info(newUser)
           let userCreated = await userService.create(newUser);
           logger.info(userCreated);
           logger.info("User registration succesful");
           return done(null, userCreated);
         } catch (e) {
-          logger.info("Error in register");
-          logger.info(e);
+          console.error("Error in register:", e);
           return done(e);
         }
       }

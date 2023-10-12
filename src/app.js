@@ -18,7 +18,6 @@ import { loginRouter } from './routes/login.html.routes.js';
 import { mockingTest } from './routes/mocking.test.routes.js';
 import { products } from './routes/products.html.routes.js';
 import { productsRouter } from './routes/products.routes.js';
-import { realTimeProducts } from './routes/real-time-products.routes.js';
 import { sessionsRouter } from './routes/session.routes.js';
 import { signupRouter } from './routes/signup.html.routes.js';
 import { usersRouter } from './routes/users.routes.js';
@@ -97,7 +96,6 @@ app.use('/user', userRouter);
 app.use('/signup', signupRouter);
 app.use('/products', products);
 app.use('/chat', chatRouter);
-app.use('/realtimeproducts', realTimeProducts);
 app.use('/cart', cartRouter);
 app.get('/error-auth', (req, res) => {
   return res.status(400).render('errorPage', { msg: 'Authorization error.' });

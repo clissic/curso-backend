@@ -72,7 +72,7 @@ export default class UsersModel {
     return user;
   }
 
-  async create({ first_name, last_name, email, avatar, age, password, role }) {
+  async create({ first_name, last_name, email, avatar, age, password, role, last_login }) {
     const userCreated = await UserMongoose.create({
       first_name,
       last_name,
@@ -82,6 +82,7 @@ export default class UsersModel {
       password,
       role,
       cartId: await cartsService.create(),
+      last_login,
     });
     return userCreated;
   }

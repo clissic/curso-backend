@@ -34,7 +34,7 @@
                     <h3>👥 USERS MANAGEMENT:</h3>
                     <div class="divDashBtn">
                         <p>Delete inactive users:</p>
-                        <a href="#" class="dashBtn" target="_blank">💣 <strong>DELETE USERS</strong> 💥</a>
+                        <a href="/api/users/d/deleteinactiveusers" class="dashBtn" target="_blank">💣 <strong>DELETE USERS</strong> 💥</a>
                     </div>
                     <div class="divDashBtn">
                         <p>Create user:</p>
@@ -50,21 +50,21 @@
                     <h3>🛍️ PRODUCTS MANAGEMENT:</h3>
                     <div class="divDashBtn">
                         <p>Manage all products:</p>
-                        <a href="/realtimeproducts#manageProd" class="dashBtn" target="_blank">📦 <strong>ALL PRODUCTS</strong> 🛍️</a>
+                        <a href="/products/real-time-products" class="dashBtn" target="_blank">📦 <strong>ALL PRODUCTS</strong> 🛍️</a>
                     </div>
                     <div class="divDashBtn">
                         <p>Create a product:</p>
-                        <a href="/realtimeproducts#createProd" class="dashBtn" target="_blank">📦 <strong>ADD PRODUCT</strong> ✔️</a>
+                        <a href="/products/create-product" class="dashBtn" target="_blank">📦 <strong>ADD PRODUCT</strong> ✔️</a>
                     </div>
                     <div class="divDashBtn">
                         <p>Modify stock:</p>
-                        <input type="text" placeholder="User's ID">
+                        <input type="text" placeholder="Product's ID">
                         <input type="number" placeholder="New stock amount">
                         <a href="#" class="dashBtn" target="_blank">🛍️ <strong>SET NEW STOCK</strong> 🧾</a>
                     </div>
                     <div class="divDashBtn">
                         <p>Modify price:</p>
-                        <input type="text" placeholder="User's ID">
+                        <input type="text" placeholder="Product's ID">
                         <input type="number" placeholder="New price amount">
                         <a href="#" class="dashBtn" target="_blank">🛍️ <strong>SET NEW PRICE</strong> 💰</a>
                     </div>
@@ -77,8 +77,8 @@
                     </div>
                     <div class="divDashBtn">
                         <p>Get user by ID:</p>
-                        <input type="text" placeholder="User's ID">
-                        <a href="#" class="dashBtn" target="_blank">👤 <strong> GENERATE JSON</strong> 📋</a>
+                        <input id="userIdInput" type="text" placeholder="User's ID">
+                        <a id="userIdBtn" href="#" class="dashBtn" target="_blank">👤 <strong> GENERATE JSON</strong> 📋</a>
                     </div>
                     <div class="divDashBtn">
                         <p>Get all products with pagination:</p>
@@ -86,11 +86,12 @@
                     </div>
                     <div class="divDashBtn">
                         <p>Get product by ID:</p>
-                        <input type="text" placeholder="Product's ID">
-                        <a href="#" class="dashBtn" target="_blank">📦 <strong> GENERATE JSON</strong> 📋</a>
+                        <input id="prodIdInput"  type="text" placeholder="Product's ID">
+                        <a id="prodIdBtn"  href="#" class="dashBtn" target="_blank">📦 <strong> GENERATE JSON</strong> 📋</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="/js/dashboard.js"></script>

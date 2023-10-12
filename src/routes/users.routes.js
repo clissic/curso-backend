@@ -1,5 +1,6 @@
 import express from "express";
 import { usersController } from "../controllers/users.controller.js";
+import { checkAdmin } from "../middlewares/auth.js";
 
 export const usersRouter = express.Router();
 
@@ -11,6 +12,6 @@ usersRouter.post("/", usersController.create);
 
 usersRouter.put("/:_id", usersController.updateOne);
 
-usersRouter.delete("/d/deleteinactiveusers", usersController.deleteInactiveUsers);
+usersRouter.delete("/d/deleteinactiveusers", checkAdmin, usersController.deleteInactiveUsers);
 
 usersRouter.delete("/:_id", usersController.deleteOne);

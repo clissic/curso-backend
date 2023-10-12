@@ -20,7 +20,7 @@ class UserService {
     }
   }
 
-  async create({ first_name, last_name, email, avatar, age, password }) {
+  async create({ first_name, last_name, email, avatar, age, password, role, last_login }) {
     try {
       return await usersModel.create({
         first_name,
@@ -29,6 +29,8 @@ class UserService {
         avatar,
         age,
         password,
+        role,
+        last_login
       });
     } catch {
       throw new Error("Failed to create a user");

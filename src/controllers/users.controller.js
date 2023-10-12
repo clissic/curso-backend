@@ -45,10 +45,10 @@ class UsersController {
       const { first_name, last_name, email, age, password } = req.body;
       const userDTO = new UserDTO(first_name, last_name, email, age, createHash(password));
       if (!userDTO.first_name || !userDTO.last_name || !userDTO.email) {
-        logger.info('Validation error: please complete firstName, lastName and email.');
+        logger.info('Validation error: please complete First Name, Last Name and Email.');
         return res.status(400).json({
           status: 'error',
-          msg: 'Please complete firstName, lastName and email.',
+          msg: 'Please complete First Name, Last Name and Email.',
           payload: {},
         });
       }
