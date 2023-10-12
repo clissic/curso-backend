@@ -96,6 +96,20 @@ class UserService {
       throw new Error("Failed to delete inactive users");
     }
   }
+
+  async toggleRole(user) {
+    try {
+      if (user.role == "user") {
+        const updatedUser = await usersModel.toggleRole(user.email, "premium");
+        return updatedUser;
+      } else if (user.role == "premium") {
+        const updatedUser = await usersModel.toggleRole(user.email, "user");
+        return updatedUser;
+      }
+    } catch (e) {
+      throw new Error("Failed to toggle roles");
+    }
+  }
 }
 
 export const userService = new UserService();

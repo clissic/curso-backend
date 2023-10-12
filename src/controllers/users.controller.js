@@ -172,6 +172,26 @@ class UsersController {
       });
     }
   }
+
+  async toggleRole(req, res) {
+    const {email} = req.params
+    const user = await userService.findByEmail(email)
+    try {
+      const updatedUser = await userService.toggleRole(user)
+      res.status(200).json({
+        status: 'success',
+        msg: 'Role toggled successfully',
+        payload: updatedUser,
+      })
+    } catch (e) {
+      logger.error("Something went wrong: " + e);
+      return res.status(500).json({
+        status: 'error',
+        msg: 'Something went wrong',
+        payload: {},
+      });
+    }
+  }
 }
 
 export const usersController = new UsersController();

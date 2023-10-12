@@ -1,7 +1,7 @@
 <div class="cartContainer">
-        <h1>iCommerce</h1>
   {{#if user}}
     <div class="userData">
+      <h1>iCommerce</h1>
       <div id="userNameContainer">
       <p><strong>Welcome: </strong>{{user.first_name}}</p>
       <img id="userAvatar" src="{{user.avatar}}" alt="user avatar">
@@ -13,7 +13,7 @@
       <a class="userCartBtn" href="/api/sessions/logout"><strong>LOGOUT</strong></a>
     </div>
   {{/if}}
-  <h1 class="firstTitle" id="cartTitle" data-id="{{cart._id}}">{{mainTitle}}</h1>
+  <h2 class="firstTitle" id="cartTitle" data-id="{{cart._id}}">{{mainTitle}}</h2>
   {{#if cart.products}}
   {{#each cart.products}}
     {{#with this}}

@@ -126,6 +126,17 @@ export default class UsersModel {
         password: newPassword,
       }
     );
+    return userUpdated;
+  }
+
+  async toggleRole(email, newRole) {
+    const userUpdated = await UserMongoose.updateOne(
+      { email: email },
+      {
+        role: newRole,
+      }
+    );
+    return userUpdated;
   }
 }
 

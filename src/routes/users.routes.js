@@ -15,3 +15,5 @@ usersRouter.put("/:_id", usersController.updateOne);
 usersRouter.delete("/d/deleteinactiveusers", checkAdmin, usersController.deleteInactiveUsers);
 
 usersRouter.delete("/:_id", usersController.deleteOne);
+
+usersRouter.get("/toggle-role/:email", checkAdmin, usersController.toggleRole);
