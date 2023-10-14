@@ -113,10 +113,8 @@ export default class UsersModel {
 
   async deleteInactiveUsers() {
     const twoDaysAgo = moment().subtract(2, 'days').toDate();
-    const result = await UserMongoose.deleteMany({
-      last_login: { $lt: twoDaysAgo },
-    });
-    return result;
+    const result = await UserMongoose.deleteMany({ last_login: { $lt: twoDaysAgo } });
+    return { result };
   }
 
   async updatePassword(email, newPassword) {

@@ -199,6 +199,13 @@ class ProductsController {
         dashboard = false;
       }
 
+      let premium;
+      if (user.role == 'premium') {
+        premium = true;
+      } else {
+        premium == false;
+      }
+
       const { currentPage, prodLimit, sort, query } = req.query;
       const sortOption = sort === 'asc' ? { price: 1 } : sort === 'desc' ? { price: -1 } : {};
       const filter = {};
@@ -247,7 +254,8 @@ class ProductsController {
         nextPage,
         prevLink,
         nextLink,
-        dashboard
+        dashboard,
+        premium
       });
     } catch (error) {
       logger.error('Failed to fetch products: ' + error);
@@ -309,6 +317,56 @@ class ProductsController {
     } catch (e) {
       logger.error('Failed to render create product page: ' + error);
       return res.status(500).render('errorPage', { msg: 'Error 500. Failed to render create product page.' });
+    }
+  }
+
+  async getByIdAndUpdateStock(req, res) {
+    try {
+      const { id, stock } = req.params;
+      let updateInfo = { stock: stock };
+      const updatedProduct = await productsService.getByIdAndUpdate(id, updateInfo);
+      if (updatedProduct) {
+        return res.status(200).json({
+          status: 'success',
+          message: `Product's stock was modified successfully`,
+          payload: updatedProduct,
+        });
+      } else {
+        logger.error('Product by ID not found in products.controller (getByIdAndUpdateStock)');
+        return res.status(404).render('errorPage', {
+          msg: 'Product by ID not found.',
+        });
+      }
+    } catch (error) {
+      logger.error('Error updating product by ID in products.controller (getByIdAndUpdateStock): ' + error);
+      return res.status(404).render('errorPage', {
+        msg: 'Error updating product by ID.',
+      });
+    }
+  }
+
+  async getByIdAndUpdatePrice(req, res) {
+    try {
+      const { id, price } = req.params;
+      let updateInfo = { price: price };
+      const updatedProduct = await productsService.getByIdAndUpdate(id, updateInfo);
+      if (updatedProduct) {
+        return res.status(200).json({
+          status: 'success',
+          message: `Product's price was modified successfully`,
+          payload: updatedProduct,
+        });
+      } else {
+        logger.error('Product by ID not found in products.controller (getByIdAndUpdateStock)');
+        return res.status(404).render('errorPage', {
+          msg: 'Product by ID not found.',
+        });
+      }
+    } catch (error) {
+      logger.error('Error updating product by ID in products.controller (getByIdAndUpdateStock): ' + error);
+      return res.status(404).render('errorPage', {
+        msg: 'Error updating product by ID.',
+      });
     }
   }
 }

@@ -59,7 +59,7 @@ class UsersController {
         payload: userCreated,
       });
     } catch (e) {
-      logger.info(e);
+      logger.error("Error: " + e);
       return res.status(500).json({
         status: 'error',
         msg: 'Something went wrong',
@@ -164,7 +164,7 @@ class UsersController {
         });
       }
     } catch (e) {
-      logger.info(e);
+      logger.info("ERROR: " + e);
       return res.status(500).json({
         status: 'error',
         msg: 'Something went wrong',

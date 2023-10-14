@@ -12,7 +12,7 @@ usersRouter.post("/", usersController.create);
 
 usersRouter.put("/:_id", usersController.updateOne);
 
-usersRouter.delete("/d/deleteinactiveusers", checkAdmin, usersController.deleteInactiveUsers);
+usersRouter.get("/d/deleteinactiveusers", checkAdmin, usersController.deleteInactiveUsers);
 
 usersRouter.delete("/:_id", usersController.deleteOne);
 

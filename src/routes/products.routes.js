@@ -15,3 +15,7 @@ productsRouter.post("/", /* uploader.single("file"), */ productsController.creat
 productsRouter.put("/:id", /* checkAdminOrPremium, */ productsController.getByIdAndUpdate);
 
 productsRouter.delete("/:id", /* checkAdminOrPremium, */ productsController.getByIdAndDelete);
+
+productsRouter.get("/update-stock/:id/:stock", productsController.getByIdAndUpdateStock);
+
+productsRouter.get("/update-price/:id/:price", productsController.getByIdAndUpdatePrice);
