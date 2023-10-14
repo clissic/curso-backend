@@ -24,6 +24,14 @@
         <p>Role:</p>
         <h3><strong>{{user.role}}</strong></h3>
       </div>
+      <div class='userInfoTag'>
+        <p>My session:</p>
+        <a href='/api/sessions/current' class='userInfoBtn' target='_blank'>👨‍💻 <strong> GENERATE JSON</strong> 📋</a>
+      </div>
+      <div class='userInfoTag'>
+        <p>My cart:</p>
+        <a href='/api/carts/{{user.cartId._id}}' class='userInfoBtn' target='_blank'>🛒 <strong> GENERATE JSON</strong> 📋</a>
+      </div>
     </form>
     <div id='buttonPanel'>
       <h2>ADMIN DASHBOARD:</h2>

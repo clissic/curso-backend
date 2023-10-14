@@ -539,6 +539,21 @@ input[type="submit"]:hover {
 
 /* DASHBOARD */
 
+.userInfoTag {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+
+.userInfoBtn {
+  font-size: 1.1vw;
+  text-decoration: none;
+  color: black;
+  background-color: rgb(223, 223, 223);
+  border-radius: 10px;
+  padding: 10px 15px 10px 15px;
+}
+
 #dashboardBody {
   display: flex;
   flex-direction: row;
