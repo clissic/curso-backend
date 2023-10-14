@@ -28,10 +28,6 @@
         <p>My session:</p>
         <a href='/api/sessions/current' class='userInfoBtn' target='_blank'>👨‍💻 <strong> GENERATE JSON</strong> 📋</a>
       </div>
-      <div class='userInfoTag'>
-        <p>My cart:</p>
-        <a href='/api/carts/{{user.cartId._id}}' class='userInfoBtn' target='_blank'>🛒 <strong> GENERATE JSON</strong> 📋</a>
-      </div>
     </form>
     <div id='buttonPanel'>
       <h2>ADMIN DASHBOARD:</h2>
@@ -50,6 +46,12 @@
             <p>Toggle role to premium / user:</p>
             <input id="userEmailInput" type='text' placeholder="User's email" />
             <a id='userEmailBtn' href='#' class='dashBtn' target='_blank'>👤 <strong>TOGGLE ROLES</strong> 🥇</a>
+          </form>
+          <h3>🛒 CART MANAGEMENT:</h3>
+          <form class='divDashBtn'>
+            <p>Get cart by ID:</p>
+            <input id="cartIdInput" type='text' placeholder="Cart's ID" />
+            <a id='cartIdBtn' href='#' class='dashBtn' target='_blank'>🛒 <strong>GENERATE JSON</strong> 📋</a>
           </form>
         </div>
         <div class='btnPnlCol'>

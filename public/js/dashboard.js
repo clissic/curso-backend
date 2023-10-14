@@ -12,6 +12,13 @@ prodIdBtn.addEventListener("click", () => {
     prodIdBtn.href = `/api/products/${prodIdInputValue}`
 });
 
+// GET CART BY ID:
+const cartIdBtn = document.getElementById("cartIdBtn");
+cartIdBtn.addEventListener("click", () => {
+    const cartIdInputValue = document.getElementById("cartIdInput").value;
+    cartIdBtn.href = `/api/carts/${cartIdInputValue}`
+});
+
 // TOGGLE ROLE TO PREMIUM / USER:
 const userEmailBtn = document.getElementById("userEmailBtn");
 userEmailBtn.addEventListener("click", () => {
