@@ -1,21 +1,21 @@
 import express from "express";
 import { cartsController } from "../controllers/carts.controller.js";
-import { checkUser } from "../middlewares/auth.js";
+import { checkAdmin, checkAdminOrPremium, checkLogin, checkUser } from "../middlewares/auth.js";
 
 export const cartsRouter = express.Router();
 
 cartsRouter.post("/", cartsController.create);
 
-cartsRouter.get("/:cid", /* checkUser, */ cartsController.getById);
+cartsRouter.get("/:cid", checkLogin, cartsController.getById);
 
-cartsRouter.delete("/:cid", cartsController.deleteAllProdInCart);
+cartsRouter.delete("/:cid", checkLogin, cartsController.deleteAllProdInCart);
 
-cartsRouter.post("/:cid/products/:pid", /* checkUser, */ cartsController.getOneAndUpdate);
+cartsRouter.post("/:cid/products/:pid", checkLogin, cartsController.getOneAndUpdate);
 
-cartsRouter.delete("/:cid/products/:pid", /* checkUser, */ cartsController.productToDeleteById);
+cartsRouter.delete("/:cid/products/:pid", checkAdminOrPremium, cartsController.productToDeleteById);
 
-cartsRouter.put("/:cid/products/:pid", /* checkUser, */ cartsController.modQuantProdInCartById);
+cartsRouter.put("/:cid/products/:pid", checkAdminOrPremium, cartsController.modQuantProdInCartById);
 
-cartsRouter.post("/:cid/purchase", cartsController.purchase);
+cartsRouter.post("/:cid/purchase", checkLogin, cartsController.purchase);
 
-cartsRouter.delete("/:cid/delete", cartsController.getByIdAndDelete);
+cartsRouter.delete("/:cid/delete", checkAdmin, cartsController.getByIdAndDelete);

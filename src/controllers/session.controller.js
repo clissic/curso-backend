@@ -16,7 +16,7 @@ class SessionsController {
       avatar: req.user.avatar,
       cartId: req.user.cartId,
     };
-    return res.redirect("/");
+    return res.redirect("/products");
   }
 
   async login(req, res) {

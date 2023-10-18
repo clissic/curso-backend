@@ -12,10 +12,10 @@ productsRouter.get("/:id", productsController.getById);
 
 productsRouter.post("/", /* uploader.single("file"), */ productsController.create);
 
-productsRouter.put("/:id", /* checkAdminOrPremium, */ productsController.getByIdAndUpdate);
+productsRouter.put("/:id", checkAdminOrPremium, productsController.getByIdAndUpdate);
 
-productsRouter.delete("/:id", /* checkAdminOrPremium, */ productsController.getByIdAndDelete);
+productsRouter.delete("/:id", checkAdminOrPremium, productsController.getByIdAndDelete);
 
-productsRouter.get("/update-stock/:id/:stock", productsController.getByIdAndUpdateStock);
+productsRouter.get("/update-stock/:id/:stock", checkAdminOrPremium, productsController.getByIdAndUpdateStock);
 
-productsRouter.get("/update-price/:id/:price", productsController.getByIdAndUpdatePrice);
+productsRouter.get("/update-price/:id/:price", checkAdminOrPremium, productsController.getByIdAndUpdatePrice);
