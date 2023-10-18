@@ -3,7 +3,7 @@ import { logger } from "../utils/logger.js";
 class UserController {
     async renderDashboard(req, res) {
         try{
-            const user = req.session || res.session.user
+            const user = req.session.user || req.session
             return res.status(200).render("dashboard", { user })
         } catch (e) {
             logger.error("Error no se donde");
