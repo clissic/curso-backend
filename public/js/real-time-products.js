@@ -66,7 +66,7 @@ getAddProductSubmitBtn.addEventListener("click", () => {
     owner,
   };
 
-  fetch(`https://coderbackend-production.onrender.com/api/products`, {
+  fetch(`/api/products`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

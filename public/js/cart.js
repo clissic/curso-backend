@@ -60,7 +60,7 @@ const emptyCart = document.getElementById("emptyCart");
 const userEmail = document.getElementById("userEmail").value;
 
 confirmCart.addEventListener("click", () => {
-  fetch(`https://coderbackend-production.onrender.com/api/carts/${cid}/purchase`, {
+  fetch(`/api/carts/${cid}/purchase`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
