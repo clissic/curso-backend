@@ -1,5 +1,7 @@
 import importModels from "../DAO/factory.js";
 import { logger } from "../utils/logger.js";
+import { transport } from "../utils/nodemailer.js";
+import env from "../config/env.config.js";
 
 const models = await importModels();
 const productsModel = models.products
@@ -49,9 +51,35 @@ class ProductsService {
 
   async getByIdAndDelete(id) {
     try {
+      const prodToDelete = await productsModel.getById(id);
+      const owner = prodToDelete.owner;
+      if (owner !== "admin") {
+        try {
+          const API_URL = env.apiUrl;
+          await transport.sendMail({
+            from: env.googleEmail,
+            to: owner,
+            subject: "[iCommerce] Your product has been deleted!",
+            html: `
+              <div>
+                <h1>iCommerce</h1>
+                <p>Your product <strong>"${prodToDelete.title}"</strong> has been deleted:</p>
+                <h3>Your product has been successfully deleted from the Data Base.</h3>
+                <p>If you did not deleted your product and think this is an error, please contact us ASAP!</p>
+                <strong>If you want to post a new product, please follow <a href="${API_URL}/create-product">this link</a>.</strong>
+                <p>Remember that this feature is only provided to PREMIUM accounts.</p>
+              </div>
+            `,
+          });
+  
+          logger.info("Deleted product (id: " + prodToDelete._id + ") email sent successfully to: " + owner);
+        } catch (error) {
+          logger.error("Failed to send elimination email to: " + owner + " / " + error);
+        }
+      }
       return await productsModel.getByIdAndDelete(id);
     } catch (error) {
-      throw new Error("Failed to delete product by ID");
+      throw new Error("Failed to delete product by ID: " + error);
     }
   }
 
