@@ -113,7 +113,7 @@ confirmCart.addEventListener("click", () => {
 });
 
 emptyCart.addEventListener("click", () => {
-  fetch(`https://coderbackend-production.onrender.com/api/carts/${cid}`, { method: "DELETE" })
+  fetch(`/api/carts/${cid}`, { method: "DELETE" })
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
