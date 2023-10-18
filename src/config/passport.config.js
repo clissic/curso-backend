@@ -81,7 +81,7 @@ export function iniPassport() {
       {
         clientID: "Iv1.5e0a43f2fd32b3ee",
         clientSecret: GITHUB_LOGIN_SECRET,
-        callbackURL: "http://127.0.0.1:8080/api/sessions/githubcallback",
+        callbackURL: `https://coderbackend-production.onrender.com/api/sessions/githubcallback`,
       },
       async (accesToken, _, profile, done) => {
         try {
