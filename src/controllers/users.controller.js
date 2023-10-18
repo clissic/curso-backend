@@ -12,8 +12,8 @@ class UsersController {
         msg: 'All users found',
         payload: users,
       });
-    } catch (e) {
-      logger.info(e);
+    } catch (error) {
+      logger.error("Error in users.controller (getAll): " + error);
       return res.status(500).json({
         status: 'error',
         msg: 'Something went wrong',
@@ -36,6 +36,7 @@ class UsersController {
         return res.status(404).json({ status: 'error', message: 'User does not exist' });
       }
     } catch (error) {
+      logger.error("Error in users.controller (findById): " + error)
       return res.status(500).json({ error: 'Internal server error' });
     }
   }
@@ -58,8 +59,8 @@ class UsersController {
         msg: 'User created',
         payload: userCreated,
       });
-    } catch (e) {
-      logger.error("Error: " + e);
+    } catch (error) {
+      logger.error("Error in users.controller (create): " + error);
       return res.status(500).json({
         status: 'error',
         msg: 'Something went wrong',
@@ -108,8 +109,8 @@ class UsersController {
           payload: {},
         });
       }
-    } catch (e) {
-      logger.info(e);
+    } catch (error) {
+      logger.error("Error in users.controller (updateOne): " + error);
       return res.status(500).json({
         status: 'error',
         msg: 'something went wrong',
@@ -121,9 +122,7 @@ class UsersController {
   async deleteOne(req, res) {
     try {
       const { _id } = req.params;
-
       const result = await userService.deleteOne({ _id });
-
       if (result?.deletedCount > 0) {
         return res.status(200).json({
           status: 'success',
@@ -137,8 +136,8 @@ class UsersController {
           payload: {},
         });
       }
-    } catch (e) {
-      logger.info(e);
+    } catch (error) {
+      logger.error("Error in users.controller (deleteOne): " + error);
       return res.status(500).json({
         status: 'error',
         msg: 'Something went wrong',
@@ -163,8 +162,8 @@ class UsersController {
           payload: {},
         });
       }
-    } catch (e) {
-      logger.info("ERROR: " + e);
+    } catch (error) {
+      logger.error("Error in users.controller (deleteInactiveUsers): " + error);
       return res.status(500).json({
         status: 'error',
         msg: 'Something went wrong',
@@ -183,8 +182,8 @@ class UsersController {
         msg: 'Role toggled successfully',
         payload: updatedUser,
       })
-    } catch (e) {
-      logger.error("Something went wrong: " + e);
+    } catch (error) {
+      logger.error("Error in users.controller (toggleRole): " + error);
       return res.status(500).json({
         status: 'error',
         msg: 'Something went wrong',

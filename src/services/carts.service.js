@@ -1,4 +1,5 @@
 import importModels from "../DAO/factory.js";
+import { logger } from "../utils/logger.js";
 
 class CartsService {
   async create() {
@@ -7,7 +8,7 @@ class CartsService {
     try {
       return await cartsModel.create();
     } catch (error) {
-      throw new Error("Failed to create cart");
+      logger.error("Failed to create cart at cart.service (create): " + error);
     }
   }
 
@@ -17,7 +18,7 @@ class CartsService {
     try {
       return await cartsModel.getById(cid);
     } catch (error) {
-      throw new Error("Failed to find cart by ID");
+      logger.error("Failed to find cart by ID at cart.service (getById): " + error);
     }
   }
 
@@ -27,7 +28,7 @@ class CartsService {
     try {
       return await cartsModel.getOneAndUpdate(cid, pid);
     } catch (error) {
-      throw new Error("Failed to update cart by ID and product ID");
+      logger.error("Failed to update cart by ID and product ID at carts.service (getOneAndUpdate): " + error)
     }
   }
 
@@ -37,7 +38,7 @@ class CartsService {
     try {
       return await cartsModel.removeProduct(cid, pid);
     } catch (error) {
-      throw new Error("Failed to remove product from cart");
+      logger.error("Failed to remove product from cart at carts.service (removeProduct): " + error)
     }
   }
 
@@ -48,7 +49,7 @@ class CartsService {
       const cartProducts = await cartsModel.getAllProducts(cid);
       return cartProducts;
     } catch (error) {
-      throw new Error("Failed to get all products from cart");
+      logger.error("Failed to get all products from cart at carts.service (getAllProducts): " + error)
     }
   }
 
@@ -59,7 +60,7 @@ class CartsService {
       const deletedCart = await cartsModel.getByIdAndDelete(cid)
       return deletedCart;
     } catch (error) {
-      throw new Error("Failed to delete cart by ID");
+      logger.error("Failed to delete cart by ID: " + error)
     }
   }
 }

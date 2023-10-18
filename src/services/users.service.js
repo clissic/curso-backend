@@ -4,6 +4,7 @@ import { UserMongoose } from "../DAO/models/mongoose/users.mongoose.js";
 import env from "../config/env.config.js";
 import { logger } from "../utils/logger.js";
 import { transport } from "../utils/nodemailer.js";
+import error from "../middlewares/error.js";
 
 const models = await importModels();
 const usersModel = models.users
@@ -13,7 +14,7 @@ class UserService {
     try {
       return await usersModel.getAll();
     } catch (error) {
-      throw new Error("Failed to find users");
+      logger.error("Failed to find users at users.service (getAll): " + error)
     }
   }
 
@@ -21,7 +22,7 @@ class UserService {
     try {
       return await usersModel.findById(id);
     } catch (error) {
-      throw new Error("Failed to find user by ID");
+      logger.error("Failed to find user by ID at users.service (findById): " + error)
     }
   }
 
@@ -37,8 +38,8 @@ class UserService {
         role,
         last_login
       });
-    } catch {
-      throw new Error("Failed to create a user");
+    } catch (error) {
+      logger.error("Failed to create an user at users.service (create): " + error)
     }
   }
 
@@ -66,7 +67,7 @@ class UserService {
         cartId,
       });
     } catch (error) {
-      throw new Error("Failed to update user by ID");
+      logger.error("Failed to update user by ID at users.service (updateOne): " + error)
     }
   }
 
@@ -74,7 +75,7 @@ class UserService {
     try {
       return await usersModel.deleteOne({ _id });
     } catch (error) {
-      throw new Error("Failed to delete user by ID");
+      logger.error("Failed to delete user by ID at users.service (deletOne): " + error)
     }
   }
 
@@ -82,7 +83,7 @@ class UserService {
     try {
       return await usersModel.findByEmail(email);
     } catch (error) {
-      throw new Error("Failed to find user by email");
+      logger.error("Failed to find user by email at users.service (findByEmail): " + error)
     }
   }
 
@@ -90,7 +91,7 @@ class UserService {
     try {
       return await usersModel.updatePassword({ email, newPassword });
     } catch(error) {
-      throw new Error("Failed to update password");
+      logger.error("Failed to update password at users.service (updatePassword): " + error)
     }
   }
 
@@ -99,9 +100,7 @@ class UserService {
       const API_URL = env.apiUrl;
       const twoDaysAgo = moment().subtract(2, 'days').toDate();
       const inactiveUsers = await UserMongoose.find({ last_login: { $lt: twoDaysAgo } });
-
       const result = await usersModel.deleteInactiveUsers();
-
       for (const user of inactiveUsers) {
         try {
           await transport.sendMail({
@@ -124,11 +123,9 @@ class UserService {
           logger.error("Failed to send elimination email to: " + user.email + "/" + error);
         }
       }
-  
       return result;
     } catch (error) {
-      logger.error("An error occurred while deleting inactive users: " + error);
-      throw error;
+      logger.error("An error occurred while deleting inactive users at users.service (deleteInactiveUsers): " + error);
     }
   }
 
@@ -141,8 +138,8 @@ class UserService {
         const updatedUser = await usersModel.toggleRole(user.email, "user");
         return updatedUser;
       }
-    } catch (e) {
-      throw new Error("Failed to toggle roles");
+    } catch (error) {
+      logger.error("Failed to toggle roles at users.service (toggleRole): " + error)
     }
   }
 }

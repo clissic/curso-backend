@@ -138,7 +138,6 @@ class CartsController {
           .status(404)
           .render("errorPage", { msg: "Error trying to find a product" });
       }
-
       const cart = await cartsService.getById(cid);
       if (!cart) {
         logger.error(
@@ -151,7 +150,6 @@ class CartsController {
       const existingProduct = cart.products.find(
         (product) => product.product._id.toString() == pid
       );
-
       if (existingProduct) {
         await cartsService.getOneAndUpdate(cid, pid);
       } else {
@@ -256,7 +254,6 @@ class CartsController {
     try {
       const cid = req.params.cid;
       const userEmail = req.body.email;
-
       const cart = await cartsService.getById(cid);
       if (!cart) {
         logger.error("Error trying to get a cart in carts.controller");
@@ -264,9 +261,7 @@ class CartsController {
           msg: "Error trying to find a cart.",
         });
       }
-
       const productsWithInsufficientStock = [];
-
       let totalPrice = 0;
       for (const product of cart.products) {
         const { product: pid, quantity } = product;
@@ -278,10 +273,8 @@ class CartsController {
           productsWithInsufficientStock.push(product);
         }
       }
-
       cart.products = productsWithInsufficientStock;
       await cart.save();
-
       if (totalPrice > 0) {
         const purchase_datetime = Date.now();
         const code = generateRandomCode();

@@ -5,8 +5,8 @@ class UserController {
         try{
             const user = req.session.user || req.session
             return res.status(200).render("dashboard", { user })
-        } catch (e) {
-            logger.error("Error no se donde");
+        } catch (error) {
+            logger.error("Error ejecutando el dashboard: " + error);
             return res.status(500).render("errorPage", { msg: "Internal Server Error" });
         }
     }

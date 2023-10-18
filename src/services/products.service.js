@@ -21,7 +21,7 @@ class ProductsService {
         owner
       );
     } catch (error) {
-      throw logger.info("Failed to create product: " + error);
+      logger.error("Failed to create product at products.service (create): " + error);
     }
   }
 
@@ -29,7 +29,7 @@ class ProductsService {
     try {
       return await productsModel.getAll();
     } catch (error) {
-      throw new Error("Failed to find products");
+      logger.error("Failed to find products at products.service (getAll): " + error)
     }
   }
 
@@ -37,7 +37,7 @@ class ProductsService {
     try {
       return await productsModel.getById(id);
     } catch (error) {
-      throw new Error("Failed to find product by ID");
+      logger.info("Failed to find product by ID at products.service (getById): " + error)
     }
   }
 
@@ -45,7 +45,7 @@ class ProductsService {
     try {
       return await productsModel.getByIdAndUpdate(id, dataToUpdate);
     } catch (error) {
-      throw new Error("Failed to update product by ID");
+      logger.error("Failed to update product by ID at products.service: " + error)
     }
   }
 
@@ -99,7 +99,7 @@ class ProductsService {
 
       return product;
     } catch (error) {
-      throw new Error(`Failed to decrease stock: ${error.message}`);
+      logger.error("failed to decrease stock at products.service (decreaseStock): " + error)
     }
   }
 }

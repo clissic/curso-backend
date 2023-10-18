@@ -11,7 +11,7 @@ class TicketsService {
       logger.info("Se creo: "+ ticket)
       return ticket
     } catch (error) {
-      throw logger.info("Failed to create ticket on service: " + error);
+      logger.error("Failed to create ticket on service at tickets.service (create): " + error);
     }
   }
 }

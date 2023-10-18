@@ -1,4 +1,5 @@
 import { generateProduct } from "../config.js";
+import { logger } from "../utils/logger.js";
 
 class MockingTestController {
   async generateProducts(req, res) {
@@ -12,7 +13,8 @@ class MockingTestController {
           message: "Products generated",
           payload: products,
         });
-      } catch {
+      } catch (error) {
+        logger.error("Error in moking.test.controller (generateProducts): " + error)
       return res.status(500).json({ error: "Could not generate products" });
     }
   }

@@ -37,8 +37,8 @@ class SessionsController {
         cartId: req.user.cartId,
       };
       return res.redirect("/products");
-    } catch (err) {
-      logger.info(err);
+    } catch (error) {
+      logger.error("Error in session.controller (login): " + error);
       return res
         .status(500)
         .render("errorPage", { msg: "Internal Server Error" });
@@ -46,8 +46,9 @@ class SessionsController {
   }
 
   logout(req, res) {
-    req.session.destroy((err) => {
-      if (err) {
+    req.session.destroy((error) => {
+      if (error) {
+        logger.error("Logout error: " + error)
         return res.render("errorPage", { msg: "Logout error." });
       }
       res.redirect("/");

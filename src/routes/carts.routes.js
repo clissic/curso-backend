@@ -1,6 +1,6 @@
 import express from "express";
 import { cartsController } from "../controllers/carts.controller.js";
-import { checkAdmin, checkAdminOrPremium, checkLogin, checkUser } from "../middlewares/auth.js";
+import { checkAdmin, checkAdminOrPremium, checkLogin } from "../middlewares/auth.js";
 
 export const cartsRouter = express.Router();
 
