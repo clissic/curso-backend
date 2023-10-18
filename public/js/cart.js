@@ -60,7 +60,7 @@ const emptyCart = document.getElementById("emptyCart");
 const userEmail = document.getElementById("userEmail").value;
 
 confirmCart.addEventListener("click", () => {
-  fetch(`http://127.0.0.1:8080/api/carts/${cid}/purchase`, {
+  fetch(`https://coderbackend-production.onrender.com/api/carts/${cid}/purchase`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -113,7 +113,7 @@ confirmCart.addEventListener("click", () => {
 });
 
 emptyCart.addEventListener("click", () => {
-  fetch(`http://127.0.0.1:8080/api/carts/${cid}`, { method: "DELETE" })
+  fetch(`https://coderbackend-production.onrender.com/api/carts/${cid}`, { method: "DELETE" })
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
